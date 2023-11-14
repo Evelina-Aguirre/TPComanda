@@ -12,6 +12,7 @@ use Slim\Routing\RouteCollectorProxy;
 require __DIR__ . '/../vendor/autoload.php';
 require_once './controllers/UsuarioController.php';
 require_once './controllers/ProductoController.php';
+require_once './controllers/PedidoController.php';
 //require_once './db/AccesoDatos.php';
 // require_once './middlewares/Logger.php';
 
@@ -33,20 +34,22 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->post('[/]', \UsuarioController::class . ':CargarUno');
     $group->put('[/]', \UsuarioController::class . ':ModificarUno');
     $group->delete('[/]', \UsuarioController::class . ':BorrarUno');
-  });
+});
 
-  $app->group('/productos', function (RouteCollectorProxy $group) {
+$app->group('/productos', function (RouteCollectorProxy $group) {
     $group->get('[/]', \ProductoController::class . ':TraerTodos');
     $group->get('/{nombre}', \ProductoController::class . ':TraerUno');
     $group->post('[/]', \ProductoController::class . ':CargarUno');
-  });
+});
 
-$app->get('[/]', function (Request $request, Response $response) {    
+$app->group('/pedidos', function (RouteCollectorProxy $group) {
+    $group->post('[/]', \PedidoController::class . ':CargarUno');
+});
+$app->get('[/]', function (Request $request, Response $response) {
     $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));
-    
+
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
 
 $app->run();
-

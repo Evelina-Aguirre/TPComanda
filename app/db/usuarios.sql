@@ -96,3 +96,26 @@ INSERT INTO `productos` (`id`, `nombre`, `sectorAsignado`,`precio`) VALUES
 (10, 'chocotorta', 'pastelero', '1200'),
 (11, 'flan', 'pastelero', '500'),
 (12, 'chipscake', 'cocinero', '850');
+
+
+
+CREATE TABLE listaProductosPorPedido (
+    id INT,
+    idPedido INT,
+    idProducto INT,
+    cantidad INT,
+    FOREIGN KEY (idPedido) REFERENCES Pedidos(id),
+    FOREIGN KEY (idProducto) REFERENCES Productos(id)
+);
+
+CREATE TABLE Pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idListaProductos INT,
+    idMesa INT,
+    estado VARCHAR(255),
+    codigoPedido VARCHAR(255),
+    fotoMesa VARCHAR(255),
+    tiempoEstimado INT,
+    horaCreacion TIME,
+    horaFinalizacion TIME
+) AUTO_INCREMENT=100;
