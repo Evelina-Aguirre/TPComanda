@@ -1,0 +1,516 @@
+{
+	"info": {
+		"_postman_id": "a3f218b3-b8cd-4a70-b92f-26b31d54a17e",
+		"name": "LaComanda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26594059"
+	},
+	"item": [
+		{
+			"name": "USUARIOS",
+			"item": [
+				{
+					"name": "ListarUsuariosTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearUsuarioMozo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "Matias",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "clave1234",
+									"type": "text"
+								},
+								{
+									"key": "roll",
+									"value": "mozo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearUsuarioPastelero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "Lucas",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "clave1234",
+									"type": "text"
+								},
+								{
+									"key": "roll",
+									"value": "pastelero",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearUsuarioCervecero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "Mariano",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "clave1234",
+									"type": "text"
+								},
+								{
+									"key": "roll",
+									"value": "cervecero",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearUsuarioBartender",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "Felipe",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "clave1234",
+									"type": "text"
+								},
+								{
+									"key": "roll",
+									"value": "bartender",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultaUsuarioPedro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios/pedro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios",
+								"pedro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ModificarUsuario_Id4",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 4,\r\n  \"usuario\": \"nuevoNombre\",\r\n  \"clave\": \"nuevaClave\",\r\n  \"roll\": \"cocinero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BajaUsuario_id4",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/usuarios?id=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"usuarios"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PRODUCTOS",
+			"item": [
+				{
+					"name": "CrearProducto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "cervezaArtesanalMiel",
+									"type": "text"
+								},
+								{
+									"key": "sectorAsignado",
+									"value": "cervecero",
+									"type": "text"
+								},
+								{
+									"key": "precio",
+									"value": "1250",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/productos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"productos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VerTodosLosProductos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/productos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"productos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarUnoPorNombre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/productos/daikiri",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"productos",
+								"daikiri"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PEDIDOS",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "CargarPedido",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idListaProductos",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "idMesa",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "estado",
+									"value": "en preparacion",
+									"type": "text"
+								},
+								{
+									"key": "codigoPedido",
+									"value": "bb1234",
+									"type": "text"
+								},
+								{
+									"key": "fotoMesa",
+									"type": "file",
+									"src": "/C:/xampp/htdocs/TPComanda/imagenes/mesa1.jpg"
+								},
+								{
+									"key": "tiempoEstimado",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MESA",
+			"item": [
+				{
+					"name": "ListarMesas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/mesas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"mesas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarMesas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "listaPedidos",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "estado",
+									"value": "cerrada",
+									"type": "text"
+								},
+								{
+									"key": "puntaje",
+									"value": "8",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/mesas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"mesas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
