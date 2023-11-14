@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
+use Slim\Routing\RouteContext;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once './controllers/UsuarioController.php';
@@ -15,7 +16,13 @@ require_once './controllers/ProductoController.php';
 require_once './controllers/PedidoController.php';
 require_once './controllers/MesaController.php';
 //require_once './db/AccesoDatos.php';
-// require_once './middlewares/Logger.php';
+require_once './middlewares/LoggerMiddleware.php';
+require_once './middlewares/AuthMiddleware.php';
+require_once './middlewares/SocioMiddleware.php';
+
+// Load ENV
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 // Instantiate App
 $app = AppFactory::create();
@@ -53,11 +60,15 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->get('[/]', \MesaController::class . ':TraerTodos');
 });
 
-$app->get('[/]', function (Request $request, Response $response) {
+$app->get('[/]', function (Request $request, Response $response) {    
     $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));
-
+    
+    // Pausa para probar el middleware (5 segundos)
+    sleep(3);
+    
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
-});
+})->add(new LoggerMiddleware())->add(\LoggerMiddleware::class . ':VerificarRol');
+
 
 $app->run();
