@@ -1,4 +1,5 @@
 <?php
+//php -S localhost:999 -t app
 // Error Handling
 error_reporting(-1);
 ini_set('display_errors', 1);
@@ -29,6 +30,8 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->get('[/]', \UsuarioController::class . ':TraerTodos');
     $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
     $group->post('[/]', \UsuarioController::class . ':CargarUno');
+    $group->put('[/]', \UsuarioController::class . ':ModificarUno');
+    $group->delete('[/]', \UsuarioController::class . ':BorrarUno');
   });
 
 $app->get('[/]', function (Request $request, Response $response) {    
