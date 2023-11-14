@@ -71,3 +71,28 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+CREATE TABLE `productos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `sectorAsignado` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `precio`int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+INSERT INTO `productos` (`id`, `nombre`, `sectorAsignado`,`precio`) VALUES
+(1, 'vinoBlanco', 'bartender','2500'),
+(2, 'vinoTinto', 'bartender', '2600'),
+(3, 'daikiri', 'bartender', '1500'),
+(4, 'mojito', 'bartender', '1800'),
+(5, 'gintonic', 'bartender', '1850'),
+(6, 'cervezaArtesanal', 'cervecero', '2000'),
+(7, 'empanada', 'cocinero', '500'),
+(8, 'hamburguesa', 'cocinero', '1500'),
+(9, 'papas', 'cocinero', '500'),
+(10, 'chocotorta', 'pastelero', '1200'),
+(11, 'flan', 'pastelero', '500'),
+(12, 'chipscake', 'cocinero', '850');
