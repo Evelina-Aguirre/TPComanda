@@ -17,7 +17,8 @@ class Pedido
 
         //$horaCreacionFormatted = $this->horaCreacion ? date_format($this->horaCreacion, 'H:i:sa') : null;
 
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO pedidos (idListaProductos, idMesa, estado, codigoPedido, fotoMesa, tiempoEstimado, horaCreacion, horaFinalizacion) VALUES (:idListaProductos, :idMesa, :estado, :codigoPedido, :fotoMesa, :tiempoEstimado, :horaCreacion, :horaFinalizacion)");
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO pedidos (idListaProductos, idMesa, estado, codigoPedido, fotoMesa, tiempoEstimado, horaCreacion,
+         horaFinalizacion) VALUES (:idListaProductos, :idMesa, :estado, :codigoPedido, :fotoMesa, :tiempoEstimado, :horaCreacion, :horaFinalizacion)");
 
         $consulta->bindValue(':idListaProductos', $this->idListaProductos, PDO::PARAM_INT);
         $consulta->bindValue(':idMesa', $this->idMesa, PDO::PARAM_INT);
@@ -29,6 +30,16 @@ class Pedido
         $consulta->bindValue(':horaFinalizacion', $this->horaFinalizacion);//date_format($this->horaFinalizacion, 'H:i:sa'));
 
         $consulta->execute();
+    }
+
+    public static function obtenerTodos()
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT idListaProductos, idMesa, estado, codigoPedido, fotoMesa, tiempoEstimado, horaCreacion,
+        horaFinalizacion FROM pedidos");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Usuario');
     }
 }
 

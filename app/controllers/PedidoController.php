@@ -15,7 +15,7 @@ class PedidoController extends Pedido
         $fotoMesa = $parametros['fotoMesa'];
         $tiempoEstimado = $parametros['tiempoEstimado'];
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $horaCreacion =  0;//new DateTime(date("h:i:sa"));
+        $horaCreacion =  0; //new DateTime(date("h:i:sa"));
         $horaFinalizacion = null;
 
         $pedido = new Pedido();
@@ -34,5 +34,14 @@ class PedidoController extends Pedido
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-}
 
+    public function TraerTodos($request, $response, $args)
+    {
+        $lista = pedido::obtenerTodos();
+        $payload = json_encode(array("listaPedidos" => $lista));
+
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+}

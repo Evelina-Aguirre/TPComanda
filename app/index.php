@@ -13,6 +13,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once './controllers/UsuarioController.php';
 require_once './controllers/ProductoController.php';
 require_once './controllers/PedidoController.php';
+require_once './controllers/MesaController.php';
 //require_once './db/AccesoDatos.php';
 // require_once './middlewares/Logger.php';
 
@@ -44,7 +45,14 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->post('[/]', \PedidoController::class . ':CargarUno');
+    $group->get('[/]', \PedidoController::class . ':TraerTodos');
 });
+
+$app->group('/mesas', function (RouteCollectorProxy $group) {
+    $group->post('[/]', \MesaController::class . ':CargarUno');
+    $group->get('[/]', \MesaController::class . ':TraerTodos');
+});
+
 $app->get('[/]', function (Request $request, Response $response) {
     $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));
 
