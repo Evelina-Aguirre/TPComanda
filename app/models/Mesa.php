@@ -27,5 +27,33 @@ class Mesa
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
     }
+
+    public function agregarPedido(Pedido $pedido)
+    {
+        $this->listaPedidos[] = $pedido;
+
+        $pedido->actualizarEstadoYHora();
+    }
+
+    public function actualizarEstadoMesa()
+    {
+        foreach ($this->listaPedidos as $pedido) {
+
+            $pedido->actualizarEstadoYHora();
+        }
+
+        $this->estado = $this->calcularEstadoMesa();
+    }
+
+    private function calcularEstadoMesa()
+    {
+        if (count($this->listaPedidos) > 0 && $this->listaPedidos[0]->estado == "listo para servir") {
+            return "con cliente esperando pedido";
+        } else {
+            return "con cliente comiendo”,"; 
+        }
+    }
+
+    
     
 }

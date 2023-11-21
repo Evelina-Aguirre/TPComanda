@@ -40,7 +40,7 @@
 							"formdata": [
 								{
 									"key": "usuario",
-									"value": "Matias",
+									"value": "Federico",
 									"type": "text"
 								},
 								{
@@ -377,32 +377,49 @@
 			"name": "PEDIDOS",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "ListarPedidos",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos"
+							],
+							"query": [
+								{
+									"key": "sector",
+									"value": "admin",
+									"disabled": true
+								}
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "CargarPedido",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "idListaProductos",
-									"value": "0",
+									"key": "listaProductos",
+									"value": "1,2",
 									"type": "text"
 								},
 								{
 									"key": "idMesa",
-									"value": "1",
+									"value": "2",
 									"type": "text"
 								},
 								{
@@ -412,7 +429,7 @@
 								},
 								{
 									"key": "codigoPedido",
-									"value": "bb1234",
+									"value": "ss234",
 									"type": "text"
 								},
 								{
@@ -422,7 +439,7 @@
 								},
 								{
 									"key": "tiempoEstimado",
-									"value": "0",
+									"value": "00:00:00",
 									"type": "text"
 								}
 							]
@@ -442,6 +459,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SetTiempoEstimado",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idPedido\": 3,\r\n  \"idProducto\":7,\r\n  \"tiempoEstimado\": \"01:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/Modificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"Modificar"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -451,10 +499,19 @@
 				{
 					"name": "ListarMesas",
 					"request": {
-						"method": "GET",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idPedido\": 4,\r\n  \"idProducto\": \"nuevoNombre\",\r\n  \"clave\": \"tiempoEstimado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/mesas",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/Modificar",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -463,7 +520,8 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"mesas"
+								"pedidos",
+								"Modificar"
 							]
 						}
 					},

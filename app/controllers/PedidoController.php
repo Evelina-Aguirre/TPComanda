@@ -8,7 +8,7 @@ class PedidoController extends Pedido
     {
         $parametros = $request->getParsedBody();
 
-        $idListaProductos = $parametros['idListaProductos'];
+        $listaProductos = $parametros['listaProductos'];
         $idMesa = $parametros['idMesa'];
         $estado = $parametros['estado'];
         $codigoPedido = $parametros['codigoPedido'];
@@ -17,16 +17,16 @@ class PedidoController extends Pedido
         $rutaDestino = './imagenes/' . $fotoMesa->getClientFilename();
 
         if ($fotoMesa->getError() === UPLOAD_ERR_OK) {
-           
+
             if (!file_exists(dirname($rutaDestino))) {
                 mkdir(dirname($rutaDestino), 0777, true);
             }
 
             $fotoMesa->moveTo($rutaDestino);
-            $this->setFotoMesa($rutaDestino); 
+            $this->setFotoMesa($rutaDestino);
         } else {
-           
-            $this->setFotoMesa(null); 
+
+            $this->setFotoMesa(null);
         }
 
         $tiempoEstimado = $parametros['tiempoEstimado'];
@@ -35,11 +35,11 @@ class PedidoController extends Pedido
         $horaFinalizacion = '00:00:00';
 
         $pedido = new Pedido();
-        $pedido->idListaProductos = $idListaProductos;
+        $pedido->listaProductos = $listaProductos;
         $pedido->idMesa = $idMesa;
         $pedido->estado = $estado;
         $pedido->codigoPedido = $codigoPedido;
-        $pedido->fotoMesa = $rutaDestino; 
+        $pedido->fotoMesa = $rutaDestino;
         $pedido->tiempoEstimado = $tiempoEstimado;
         $pedido->horaCreacion = $horaCreacion;
         $pedido->horaFinalizacion = $horaFinalizacion;
@@ -62,4 +62,43 @@ class PedidoController extends Pedido
     }
 
  
+    public function actualizarEstadoPedidoMesa($request, $response, $args)
+    {
+        $idPedido = $args['idPedido'];
+
+        if (Pedido::actualizarEstadoYHora($idPedido)) {
+            $payload = json_encode(array("mensaje" => "Estado y hora del pedido actualizados correctamente."));
+        } else {
+            $payload = json_encode(array("error" => "Pedido no encontrado o no es necesario actualizar."));
+        }
+    
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function ModificarPedido($request, $response, $args)
+    {
+        $parametros = $request->getParsedBody();
+
+        $idPedido = $parametros['idPedido'];
+        $idProducto = $parametros['idProducto'];
+        $tiempoEstimado = $parametros['tiempoEstimado'];
+
+        $pedido = new Pedido();
+
+        try {
+            $pedido->modificarPedido($idPedido, $idProducto, $tiempoEstimado);
+
+            $payload = json_encode(array("mensaje" => "Pedido modificado con éxito"));
+            $response->getBody()->write($payload);
+
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (Exception $e) {
+
+            $payload = json_encode(array("error" => $e->getMessage()));
+            $response->getBody()->write($payload);
+
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 }

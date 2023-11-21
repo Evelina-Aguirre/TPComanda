@@ -53,11 +53,14 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->post('[/]', \PedidoController::class . ':CargarUno');
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
+    $group->put('/modificar', \PedidoController::class . ':ModificarPedido');
+    $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->post('[/]', \MesaController::class . ':CargarUno');
     $group->get('[/]', \MesaController::class . ':TraerTodos');
+    $group->put('[/]', \PedidoController::class . ':ModificarPedido');
 });
 
 $app->get('[/]', function (Request $request, Response $response) {    
