@@ -37,4 +37,8 @@ class AccesoDatos
     {
         trigger_error('ERROR: La clonación de este objeto no está permitida', E_USER_ERROR);
     }
+    public function obtenerUltimoIdInsertado()
+{
+    return $this->objetoPDO->lastInsertId();
+}
 }

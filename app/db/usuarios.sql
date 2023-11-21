@@ -100,7 +100,7 @@ INSERT INTO `productos` (`id`, `nombre`, `sectorAsignado`,`precio`) VALUES
 
 
 CREATE TABLE listaProductosPorPedido (
-    id INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     idPedido INT,
     idProducto INT,
     cantidad INT,
@@ -110,7 +110,7 @@ CREATE TABLE listaProductosPorPedido (
 
 CREATE TABLE Pedidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    idListaProductos INT,
+    listaProductos INT,
     idMesa INT,
     estado VARCHAR(255),
     codigoPedido VARCHAR(255),

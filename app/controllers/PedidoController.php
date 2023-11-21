@@ -12,18 +12,34 @@ class PedidoController extends Pedido
         $idMesa = $parametros['idMesa'];
         $estado = $parametros['estado'];
         $codigoPedido = $parametros['codigoPedido'];
-        $fotoMesa = $parametros['fotoMesa'];
+        $fotoMesa = $request->getUploadedFiles()['fotoMesa'];
+
+        $rutaDestino = './imagenes/' . $fotoMesa->getClientFilename();
+
+        if ($fotoMesa->getError() === UPLOAD_ERR_OK) {
+           
+            if (!file_exists(dirname($rutaDestino))) {
+                mkdir(dirname($rutaDestino), 0777, true);
+            }
+
+            $fotoMesa->moveTo($rutaDestino);
+            $this->setFotoMesa($rutaDestino); 
+        } else {
+           
+            $this->setFotoMesa(null); 
+        }
+
         $tiempoEstimado = $parametros['tiempoEstimado'];
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $horaCreacion =  0; //new DateTime(date("h:i:sa"));
-        $horaFinalizacion = null;
+        $horaCreacion = new DateTime(date("h:i:sa"));
+        $horaFinalizacion = '00:00:00';
 
         $pedido = new Pedido();
         $pedido->idListaProductos = $idListaProductos;
         $pedido->idMesa = $idMesa;
         $pedido->estado = $estado;
         $pedido->codigoPedido = $codigoPedido;
-        $pedido->fotoMesa = $fotoMesa;
+        $pedido->fotoMesa = $rutaDestino; 
         $pedido->tiempoEstimado = $tiempoEstimado;
         $pedido->horaCreacion = $horaCreacion;
         $pedido->horaFinalizacion = $horaFinalizacion;
@@ -44,4 +60,6 @@ class PedidoController extends Pedido
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
+
+ 
 }

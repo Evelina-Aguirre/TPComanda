@@ -71,4 +71,6 @@ $app->get('[/]', function (Request $request, Response $response) {
 })->add(new LoggerMiddleware())->add(\LoggerMiddleware::class . ':VerificarRol');
 
 
+
+
 $app->run();

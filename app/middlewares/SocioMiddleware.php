@@ -11,7 +11,7 @@ class SocioMiddleware
         $roll = $request->getParsedBody(("roll"));
         $response = new Response();
   
-            if($roll->rol == "Socio")
+            if($roll->roll == "Socio")
             {
                 $response= $handler->handle($request);
             }
