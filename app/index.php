@@ -60,6 +60,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/listaPendientes/bartender', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/listaPendientes/cocinero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/listaPendientes/pastelero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');

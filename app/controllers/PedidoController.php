@@ -65,8 +65,9 @@ class PedidoController extends Pedido
     public function actualizarEstadoPedidoMesa($request, $response, $args)
     {
         $idPedido = $args['idPedido'];
+        $horaFinalizacion=$args['horaFinalizacion'];
 
-        if (Pedido::actualizarEstadoYHora($idPedido)) {
+        if (Pedido::actualizarEstadoYHora($idPedido, $horaFinalizacion)) {
             $payload = json_encode(array("mensaje" => "Estado y hora del pedido actualizados correctamente."));
         } else {
             $payload = json_encode(array("error" => "Pedido no encontrado o no es necesario actualizar."));
