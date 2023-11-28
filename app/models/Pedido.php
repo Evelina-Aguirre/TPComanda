@@ -58,7 +58,7 @@ class Pedido
 
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("
-        SELECT productos.id, productos.nombre, productos.precio, lp.tiempoPreparacion
+        SELECT productos.id, productos.nombre, productos.precio, lp.tiempoEstimado, lp.estado
         FROM listaproductosporpedido lp
         JOIN productos ON lp.idProducto = productos.id
         WHERE lp.idPedido = :idPedido
@@ -117,7 +117,7 @@ class Pedido
         return $pedido;
     }
 
-    public function modificarPedido($idPedido, $idProducto, $tiempoEstimado)
+   /* public function modificarPedido($idPedido, $idProducto, $tiempoEstimado,$empleadoACargo, $estado)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
@@ -138,18 +138,77 @@ class Pedido
 
         $consulta = $objAccesoDatos->prepararConsulta("
             UPDATE listaproductosporpedido
-            SET tiempoPreparacion = :tiempoEstimado
+            SET tiempoEstimado = :tiempoEstimado, empleadoACargo=:empleadoACargo, estado=:estado
             WHERE idPedido = :idPedido AND idProducto = :idProducto
         ");
 
         $consulta->bindValue(':tiempoEstimado', $tiempoEstimado, PDO::PARAM_INT);
+        $consulta->bindValue(':empleadoACargo', $empleadoACargo, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', $estado, PDO::PARAM_STR);
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
         $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
 
         $consulta->execute();
 
         $this->recalcularTiempoEstimado($idPedido);
+    }*/
+
+    public function modificarPedido($idPedido, $idProducto, $tiempoEstimado, $empleadoACargo, $estado = null)
+{
+    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+    $consulta = $objAccesoDatos->prepararConsulta("
+        SELECT COUNT(*) as existe
+        FROM listaproductosporpedido
+        WHERE idPedido = :idPedido AND idProducto = :idProducto
+    ");
+    $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+    $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+    $consulta->execute();
+
+    $existeProducto = $consulta->fetch(PDO::FETCH_ASSOC)['existe'];
+
+    if (!$existeProducto) {
+        throw new Exception("El producto con id $idProducto no pertenece al pedido con id $idPedido.");
     }
+
+    $updateStatement = "UPDATE listaproductosporpedido SET ";
+    $updateData = array();
+
+    if ($tiempoEstimado !== null) {
+        $updateStatement .= "tiempoEstimado = :tiempoEstimado, ";
+        $updateData[':tiempoEstimado'] = $tiempoEstimado;
+    }
+
+    if ($empleadoACargo !== null) {
+        $updateStatement .= "empleadoACargo = :empleadoACargo, ";
+        $updateData[':empleadoACargo'] = $empleadoACargo;
+    }
+
+    if ($estado !== null) {
+        $updateStatement .= "estado = :estado, ";
+        $updateData[':estado'] = $estado;
+    }
+
+    // Elimina la coma al final del último campo en el statement
+    $updateStatement = rtrim($updateStatement, ', ');
+
+    $updateStatement .= " WHERE idPedido = :idPedido AND idProducto = :idProducto";
+
+    $consulta = $objAccesoDatos->prepararConsulta($updateStatement);
+
+    foreach ($updateData as $key => $value) {
+        $consulta->bindValue($key, $value);
+    }
+
+    $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+    $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+
+    $consulta->execute();
+
+    $this->recalcularTiempoEstimado($idPedido);
+}
+
 
 
     private function recalcularTiempoEstimado($idPedido)
@@ -157,7 +216,7 @@ class Pedido
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
         $consulta = $objAccesoDatos->prepararConsulta("
-        SELECT MAX(tiempoPreparacion) as maxTiempoPreparacion
+        SELECT MAX(tiempoEstimado) as maxTiempoEstimado
         FROM listaproductosporpedido
         WHERE idPedido = :idPedido
     ");
@@ -165,15 +224,15 @@ class Pedido
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
         $consulta->execute();
 
-        $maxTiempoPreparacion = $consulta->fetch(PDO::FETCH_ASSOC)['maxTiempoPreparacion'];
+        $maxTiempoEstimado = $consulta->fetch(PDO::FETCH_ASSOC)['maxTiempoEstimado'];
 
         $consulta = $objAccesoDatos->prepararConsulta("
         UPDATE pedidos
-        SET tiempoEstimado = :maxTiempoPreparacion
+        SET tiempoEstimado = :maxTiempoEstimado
         WHERE id = :idPedido
     ");
 
-        $consulta->bindValue(':maxTiempoPreparacion', $maxTiempoPreparacion, PDO::PARAM_INT);
+        $consulta->bindValue(':maxTiempoEstimado', $maxTiempoEstimado, PDO::PARAM_INT);
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
 
         $consulta->execute();
@@ -189,8 +248,7 @@ class Pedido
         $consulta = $objAccesoDatos->prepararConsulta("
         SELECT tiempoEstimado
         FROM pedidos
-        WHERE id = :idPedido
-    ");
+        WHERE id = :idPedido");
 
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
         $consulta->execute();
@@ -215,7 +273,61 @@ class Pedido
 
             return true;
         }
-
-        return false;
     }
+
+
+///////////////////////////////////////
+/*
+    public function obtenerUsuarioAleatorio()
+    {
+
+    $roles = ['Cocinero', 'Cervecero', 'Pastelero', 'Bartender'];
+
+    $rolAleatorio = $roles[array_rand($roles)];
+
+    $usuario = Usuario::obtenerUsuarioAleatorioPorRol($rolAleatorio);
+
+    return $usuario;
+    }
+
+    public function generarTiempoEsperaAleatorio()
+    {
+        $horaAleatoria = mt_rand(0, 1); 
+        $minutoAleatorio = mt_rand(0, 59);
+
+        $tiempoEspera = sprintf("%02d:%02d:00", $horaAleatoria + 30, $minutoAleatorio);
+
+        return $tiempoEspera;
+    }
+
+
+// En la clase Usuario, agregar un método estático para obtener un usuario aleatorio por rol
+public static function obtenerUsuarioAleatorioPorRol($rol)
+{
+    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+    $consulta = $objAccesoDatos->prepararConsulta("SELECT nombre FROM usuarios WHERE roll = :rol AND estado = 'activo'");
+    $consulta->bindValue(':rol', $rol, PDO::PARAM_STR);
+    $consulta->execute();
+
+    // Obtener el resultado como un objeto Usuario
+    $usuario = $consulta->fetchObject('Usuario');
+
+    return $usuario;
+}
+
+// Luego, en tu función para asignar el producto
+private function asignarProducto()
+{
+    $usuarioAsignado = $this->obtenerUsuarioAleatorio();
+
+    // Realizar la inserción en la tabla listaproductosporpedido
+    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+    $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO listaproductosporpedido (idPedido, idProducto, tiempoEstimado, empleadoACargo) VALUES (:idPedido, :idProducto, :tiempoEstimado, :empleadoACargo)");
+    $consulta->bindValue(':idPedido', $this->id, PDO::PARAM_INT);
+    $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+    $consulta->bindValue(':tiempoEstimado', $tiempoEstimado, PDO::PARAM_STR);
+    $consulta->bindValue(':empleadoACargo', $usuarioAsignado->nombre, PDO::PARAM_STR);
+    $consulta->execute();
+}
+*/
 }

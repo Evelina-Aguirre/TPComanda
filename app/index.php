@@ -58,8 +58,13 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->post('[/]', \PedidoController::class . ':CargarUno');
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
-    $group->put('/modificar', \PedidoController::class . ':ModificarPedido');
+    $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/listaPendientes/bartender', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/listaPendientes/cocinero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/listaPendientes/pastelero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/listaPendientes/cervecero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) {

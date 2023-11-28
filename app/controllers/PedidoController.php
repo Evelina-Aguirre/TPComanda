@@ -76,18 +76,20 @@ class PedidoController extends Pedido
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function ModificarPedido($request, $response, $args)
+    public function ModificarUno($request, $response, $args)
     {
         $parametros = $request->getParsedBody();
 
         $idPedido = $parametros['idPedido'];
         $idProducto = $parametros['idProducto'];
         $tiempoEstimado = $parametros['tiempoEstimado'];
+        $empleadoACargo=$parametros['empleadoACargo'];
+        $estado=$parametros['estado'];
 
         $pedido = new Pedido();
 
         try {
-            $pedido->modificarPedido($idPedido, $idProducto, $tiempoEstimado);
+            $pedido->modificarPedido($idPedido, $idProducto, $tiempoEstimado,$empleadoACargo,$estado);
 
             $payload = json_encode(array("mensaje" => "Pedido modificado con éxito"));
             $response->getBody()->write($payload);
