@@ -8,15 +8,17 @@ class UsuarioController extends Usuario implements IApiUsable
   {
     $parametros = $request->getParsedBody();
 
-    $usuario = $parametros['usuario'];
+    $nombre = $parametros['nombre'];
     $clave = $parametros['clave'];
     $roll = $parametros['roll'];
+    $fechaAlta=$parametros['fechaAlta'];
 
-    // Creamos el usuario
+
     $usr = new Usuario();
-    $usr->usuario = $usuario;
+    $usr->nombre = $nombre;
     $usr->clave = $clave;
     $usr->roll = $roll;
+    $usr->fechaAlta=$fechaAlta;
     $usr->crearUsuario();
 
     $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
@@ -28,8 +30,7 @@ class UsuarioController extends Usuario implements IApiUsable
 
   public function TraerUno($request, $response, $args)
   {
-    // Buscamos usuario por nombre
-    $usr = $args['usuario'];
+    $usr = $args['nombre'];
     $usuario = Usuario::obtenerUsuario($usr);
     $payload = json_encode($usuario);
 
@@ -53,15 +54,20 @@ class UsuarioController extends Usuario implements IApiUsable
     $parametros = $request->getParsedBody();
 
     $id = $parametros['id'];
-    $usuario = $parametros['usuario'];
+    $nombre = $parametros['nombre'];
     $clave = $parametros['clave'];
     $roll = $parametros['roll'];
+    $fechaAlta=$parametros['fechaAlta'];
+    $fechaBaja=$parametros['fechaBaja'];
+    $estado=$parametros['estado'];
 
-    // Creamos el usuario
     $usr = new Usuario();
-    $usr->usuario = $usuario;
+    $usr->nombre = $nombre;
     $usr->clave = $clave;
     $usr->roll = $roll;
+    $usr->fechaAlta=$fechaAlta;
+    $usr->fechaBaja=$fechaBaja;
+    $usr->estado=$estado;
     $usr->ModificarUsuario($id);
 
     $payload = json_encode(array("mensaje" => "Usuario modificado con exito"));

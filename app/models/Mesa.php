@@ -1,5 +1,10 @@
 <?php
 
+/**“con cliente esperando pedido” ,
+*”con cliente comiendo”,
+* “con cliente pagando” y
+* “cerrada”.*/
+
 class Mesa
 {
     public $id;

@@ -1,51 +1,17 @@
 <?php
-/*use Psr\Http\Message\ServerRequestInterface as Request;
-//use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Slim\Psr7\Response;
-
-class AuthMiddleware
-{
-    /**
-     * Example middleware invokable class
-     *
-     * @param  ServerRequest  $request PSR-7 request
-     * @param  RequestHandler $handler PSR-15 request handler
-     *
-     * @return Response
-     */
-   /* public function __invoke(Request $request, Psr\Http\Server\RequestHandlerInterface $handler): Response
-    {   
-        $parametros = $request->getQueryParams();
-
-        $sector = $parametros['sector'];
-
-        if ($sector === 'admin') {
-            $response = $handler->handle($request);
-        } else {
-            $response = new Response();
-            $payload = json_encode(array('mensaje' => 'No sos Admin'));
-            $response->getBody()->write($payload);
-        }
-
-        return $response->withHeader('Content-Type', 'application/json');
-    }
-}*/
-
-
 use Psr\Http\Message\ServerRequestInterface as Request;
 //use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
+use Firebase\JWT\JWT;
 
 class AuthMiddleware
 {
-    /**
-     * Example middleware invokable class
-     *
-     * @param  ServerRequest  $request PSR-7 request
-     * @param  RequestHandler $handler PSR-15 request handler
-     *
-     * @return Response
-     */
+
+    private static $miClaveSecreta = 'T3sT$JWT'; //Clave Secreta
+    private static $algoritmoDeCodificacion = ['HS256']; // Algoritmo de Codificacion
+    private static $aud = null;
+   
+    
     public function __invoke(Request $request, Psr\Http\Server\RequestHandlerInterface $handler): Response
     {   
         $header = $request->getHeaderLine('Authorization');
@@ -76,5 +42,24 @@ class AuthMiddleware
             $response->getBody()->write($payload);
         }
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function ObtenerPayLoad($token)
+    {
+        return JWT::decode(
+            $token,
+            self::$miClaveSecreta,
+            self::$algoritmoDeCodificacion
+        );
+    }
+    
+    public static function ObtenerDatoaAPartirDeToken($token)
+    {
+        
+        return JWT::decode(
+            $token,
+            self::$miClaveSecreta,
+            self::$algoritmoDeCodificacion
+        )->data;
     }
 }

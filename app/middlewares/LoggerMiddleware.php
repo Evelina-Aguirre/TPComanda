@@ -1,6 +1,5 @@
 <?php
 
-
 use Psr\Http\Message\ServerRequestInterface as Request;
 //use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
@@ -30,18 +29,20 @@ class LoggerMiddleware
 
     public function VerificarRol(Request $request, Psr\Http\Server\RequestHandlerInterface $handler): Response
     {
-        $parametros = $request->getQueryParams();
+        $parametros = $request->getParsedBody();
 
-        $sector = $parametros['sector'];
 
-        if ($sector === 'admin') {
+        $sector = $parametros['roll'];
+
+        if ($sector === 'socio') {
             $response = $handler->handle($request);
         } else {
             $response = new Response();
-            $payload = json_encode(array('mensaje' => 'No sos Admin'));
+            $payload = json_encode(array('mensaje' => 'No sos un socio.'));
             $response->getBody()->write($payload);
         }
 
         return $response->withHeader('Content-Type', 'application/json');
     }
+    
 }

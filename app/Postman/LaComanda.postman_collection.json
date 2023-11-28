@@ -382,7 +382,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/pedidos",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/actualizarEstado/118",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -391,7 +391,9 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"pedidos"
+								"pedidos",
+								"actualizarEstado",
+								"118"
 							],
 							"query": [
 								{
@@ -467,7 +469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"idPedido\": 3,\r\n  \"idProducto\":7,\r\n  \"tiempoEstimado\": \"01:00:00\"\r\n}",
+							"raw": "{\r\n  \"idPedido\": 116,\r\n  \"idProducto\":7,\r\n  \"tiempoEstimado\": \"01:00:00\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -475,7 +477,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/pedidos/Modificar",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/modificar",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -485,7 +487,7 @@
 								"TPComanda",
 								"app",
 								"pedidos",
-								"Modificar"
+								"modificar"
 							]
 						}
 					},

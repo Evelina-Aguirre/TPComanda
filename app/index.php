@@ -18,7 +18,10 @@ require_once './controllers/MesaController.php';
 //require_once './db/AccesoDatos.php';
 require_once './middlewares/LoggerMiddleware.php';
 require_once './middlewares/AuthMiddleware.php';
+require_once './middlewares/GuardarUsuarioMiddleware.php';
 require_once './middlewares/SocioMiddleware.php';
+require_once './middlewares/MozoMiddleware.php';
+require_once './middlewares/ClienteMiddleware.php';
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -39,15 +42,17 @@ $app->addBodyParsingMiddleware();
 $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->get('[/]', \UsuarioController::class . ':TraerTodos');
     $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
-    $group->post('[/]', \UsuarioController::class . ':CargarUno');
-    $group->put('[/]', \UsuarioController::class . ':ModificarUno');
-    $group->delete('[/]', \UsuarioController::class . ':BorrarUno');
+    $group->post('[/]', \UsuarioController::class . ':CargarUno') ->add(new GuardarUsuarioMiddleware())->add(new SocioMiddleware());
+    $group->put('[/]', \UsuarioController::class . ':ModificarUno')->add(new SocioMiddleware());
+    $group->delete('[/]', \UsuarioController::class . ':BorrarUno')->add(new SocioMiddleware());
 });
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
+    $group->get('/exportarCSV', \ProductoController::class . ':ExportarCsv')->add(new SocioMiddleware());
     $group->get('[/]', \ProductoController::class . ':TraerTodos');
     $group->get('/{nombre}', \ProductoController::class . ':TraerUno');
     $group->post('[/]', \ProductoController::class . ':CargarUno');
+    $group->post('/importarCSV', \ProductoController::class . ':ImportarCsv')->add(new SocioMiddleware());
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
@@ -64,7 +69,7 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
 });
 
 $app->get('[/]', function (Request $request, Response $response) {    
-    $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));
+    $payload = json_encode(array("mensaje" => "TP COMANDA"));
     
     // Pausa para probar el middleware (5 segundos)
     sleep(3);

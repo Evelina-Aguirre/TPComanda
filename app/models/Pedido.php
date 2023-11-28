@@ -161,7 +161,7 @@ class Pedido
         FROM listaproductosporpedido
         WHERE idPedido = :idPedido
     ");
-
+ 
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
         $consulta->execute();
 

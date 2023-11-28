@@ -31,6 +31,7 @@ class AutentificadorJWT
                 self::$tipoEncriptacion
             );
         } catch (Exception $e) {
+            printf("de acá");
             throw $e;
         }
         if ($decodificado->aud !== self::Aud()) {

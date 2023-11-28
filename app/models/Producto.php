@@ -49,4 +49,18 @@ class Producto
         return $producto;
     }
     
+    public static function cargarCSV($path)
+    {
+        $array = Csv::ImportarCSV($path);
+        for($i = 0; $i < sizeof($array); $i++)
+        {
+            $datos = explode(",", $array[$i]); 
+            $producto = new Producto();
+            $producto->id = $datos[0];
+            $producto->nombre = $datos[1];
+            $producto->sectorAsignado = $datos[2];
+            $producto->precio = $datos[3];
+            $producto->crearProducto();
+        }
+    }
 }
