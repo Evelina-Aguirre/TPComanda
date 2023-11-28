@@ -56,15 +56,12 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
-    $group->post('[/]', \PedidoController::class . ':CargarUno');
+    $group->post('[/]', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware());
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/listaPendientes/bartender', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/listaPendientes/cocinero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/listaPendientes/pastelero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/listaPendientes/cervecero', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
+    $group->get('/listaPendientes', \PedidoController::class . ':listaPendientes');
 
 });
 
@@ -73,6 +70,11 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->get('[/]', \MesaController::class . ':TraerTodos');
     $group->put('[/]', \PedidoController::class . ':ModificarPedido');
 });
+
+
+$app->post('/login', \LoginController::class . ':Ingresar');
+$app->get('/cerrarSesion', \LoginController::class . ':Deslogear');
+
 
 $app->get('[/]', function (Request $request, Response $response) {    
     $payload = json_encode(array("mensaje" => "TP COMANDA"));

@@ -67,7 +67,7 @@ class PedidoController extends Pedido
         $idPedido = $args['idPedido'];
         $horaFinalizacion=$args['horaFinalizacion'];
 
-        if (Pedido::actualizarEstadoYHora($idPedido, $horaFinalizacion)) {
+        if (Pedido::actualizarHoraFinalización($idPedido, $horaFinalizacion)) {
             $payload = json_encode(array("mensaje" => "Estado y hora del pedido actualizados correctamente."));
         } else {
             $payload = json_encode(array("error" => "Pedido no encontrado o no es necesario actualizar."));
@@ -103,5 +103,17 @@ class PedidoController extends Pedido
 
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
+    }
+
+
+    public function listaPendientes($request, $response, $args)
+    {
+        $roll = $args['roll'];
+
+        $pedidos = Pedido::listarPedidosPorRol($roll);
+
+        $response->getBody()->write(json_encode($pedidos));
+
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }

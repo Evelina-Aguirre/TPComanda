@@ -9,7 +9,6 @@ class MozoMiddleware
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $authorizationHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-
         
         list($tokenType, $token) = sscanf($authorizationHeader, '%s %s');
 
@@ -27,10 +26,10 @@ class MozoMiddleware
 
             if ($datos->roll == "Mozo") {
                 printf("Realiza esta acción un Mozo");
-                $response = $handler->handle($request);
             } else {
                 $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los socios.']));
             }
+            $response = $handler->handle($request);
         } catch (Exception $excepcion) {
             $response->getBody()->write(json_encode(['Error' => $excepcion->getMessage()]));
         }

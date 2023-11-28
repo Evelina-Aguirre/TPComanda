@@ -119,62 +119,92 @@ class Pedido
 
 
     public function modificarPedido($idPedido, $idProducto, $tiempoEstimado, $empleadoACargo, $estado = null)
-{
-    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
-    $consulta = $objAccesoDatos->prepararConsulta("
+        $consulta = $objAccesoDatos->prepararConsulta("
         SELECT COUNT(*) as existe
         FROM listaproductosporpedido
         WHERE idPedido = :idPedido AND idProducto = :idProducto
     ");
-    $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
-    $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
-    $consulta->execute();
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+        $consulta->execute();
 
-    $existeProducto = $consulta->fetch(PDO::FETCH_ASSOC)['existe'];
+        $existeProducto = $consulta->fetch(PDO::FETCH_ASSOC)['existe'];
 
-    if (!$existeProducto) {
-        throw new Exception("El producto con id $idProducto no pertenece al pedido con id $idPedido.");
+        if (!$existeProducto) {
+            throw new Exception("El producto con id $idProducto no pertenece al pedido con id $idPedido.");
+        }
+
+        $updateStatement = "UPDATE listaproductosporpedido SET ";
+        $updateData = array();
+
+        if ($tiempoEstimado !== null) {
+            $updateStatement .= "tiempoEstimado = :tiempoEstimado, ";
+            $updateData[':tiempoEstimado'] = $tiempoEstimado;
+        }
+
+        if ($empleadoACargo !== null) {
+            $updateStatement .= "empleadoACargo = :empleadoACargo, ";
+            $updateData[':empleadoACargo'] = $empleadoACargo;
+        }
+
+        if ($estado !== null) {
+            $updateStatement .= "estado = :estado, ";
+            $updateData[':estado'] = $estado;
+        }
+
+
+        $updateStatement = rtrim($updateStatement, ', ');
+
+        $updateStatement .= " WHERE idPedido = :idPedido AND idProducto = :idProducto";
+
+        $consulta = $objAccesoDatos->prepararConsulta($updateStatement);
+
+        foreach ($updateData as $key => $value) {
+            $consulta->bindValue($key, $value);
+        }
+
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+
+        $consulta->execute();
+
+        $this->recalcularTiempoEstimado($idPedido);
     }
 
-    $updateStatement = "UPDATE listaproductosporpedido SET ";
-    $updateData = array();
+    public static function listarPedidosPorRol($roll)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
-    if ($tiempoEstimado !== null) {
-        $updateStatement .= "tiempoEstimado = :tiempoEstimado, ";
-        $updateData[':tiempoEstimado'] = $tiempoEstimado;
+        $consulta = $objAccesoDatos->prepararConsulta(
+            "SELECT * FROM listaproductosporpedido WHERE empleadoACargo = :roll"
+        );
+        $consulta->bindValue(':roll', $roll, PDO::PARAM_STR);
+        $consulta->execute();
+    
+        $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+    
+
+        if (count($resultados) > 0) {
+            $nombreEmpleado = $resultados[0]['empleadoACargo'];
+    
+            $consultaRol = $objAccesoDatos->prepararConsulta(
+                "SELECT roll FROM usuarios WHERE usuario = :nombreEmpleado"
+            );
+            $consultaRol->bindValue(':nombreEmpleado', $nombreEmpleado, PDO::PARAM_STR);
+            $consultaRol->execute();
+    
+            $rolEmpleado = $consultaRol->fetch(PDO::FETCH_ASSOC)['roll'];
+    
+            foreach ($resultados as &$pedido) {
+                $pedido['rolEmpleado'] = $rolEmpleado;
+            }
+        }
+    
+        return $resultados;
     }
-
-    if ($empleadoACargo !== null) {
-        $updateStatement .= "empleadoACargo = :empleadoACargo, ";
-        $updateData[':empleadoACargo'] = $empleadoACargo;
-    }
-
-    if ($estado !== null) {
-        $updateStatement .= "estado = :estado, ";
-        $updateData[':estado'] = $estado;
-    }
-
-
-    $updateStatement = rtrim($updateStatement, ', ');
-
-    $updateStatement .= " WHERE idPedido = :idPedido AND idProducto = :idProducto";
-
-    $consulta = $objAccesoDatos->prepararConsulta($updateStatement);
-
-    foreach ($updateData as $key => $value) {
-        $consulta->bindValue($key, $value);
-    }
-
-    $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
-    $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
-
-    $consulta->execute();
-
-    $this->recalcularTiempoEstimado($idPedido);
-}
-
-
 
     private function recalcularTiempoEstimado($idPedido)
     {
@@ -185,7 +215,7 @@ class Pedido
         FROM listaproductosporpedido
         WHERE idPedido = :idPedido
     ");
- 
+
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
         $consulta->execute();
 
@@ -204,32 +234,23 @@ class Pedido
     }
 
     public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
-{
-    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
-    if ($horaFinalizacion === null) {
-        $horaActual = new DateTime();
-        $horaFinalizacion = $horaActual->format('h:i:sa');
-    }
+        if ($horaFinalizacion === null) {
+            $horaActual = new DateTime();
+            $horaFinalizacion = $horaActual->format('h:i:sa');
+        }
 
-    $consulta = $objAccesoDatos->prepararConsulta("
+        $consulta = $objAccesoDatos->prepararConsulta("
         UPDATE pedidos
         SET estado = 'listo para servir', horaFinalizacion = :horaFinalizacion
         WHERE id = :idPedido
     ");
 
-    $consulta->bindValue(':horaFinalizacion', $horaFinalizacion);
-    $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->bindValue(':horaFinalizacion', $horaFinalizacion);
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
 
-    $consulta->execute();
-}
-
-
-
-
-   
-
-
-
-
+        $consulta->execute();
+    }
 }

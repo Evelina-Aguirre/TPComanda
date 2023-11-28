@@ -11,7 +11,7 @@ class AutentificadorJWT
         $ahora = time();
         $payload = array(
             'iat' => $ahora,
-            'exp' => $ahora + (60000),
+            'exp' => $ahora + (600000),
             'aud' => self::Aud(),
             'data' => $datos,
             'app' => "Test JWT"
