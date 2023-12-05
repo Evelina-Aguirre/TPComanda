@@ -37,4 +37,22 @@ class MesaController extends Usuario// implements IApiUsable
   }
 
  
+ 
+  public function consultarEstadoPedido($request, $response, $args)
+  {
+    $queryParams = $request->getQueryParams();
+
+    $codigoMesa = $queryParams['codigoMesa'] ?? null;
+    $codigoPedido = $queryParams['codigoPedido'] ?? null;
+
+    $idMesa = Mesa::obtenerIdMesaPorCodigo($codigoMesa);
+    
+    $estadoPedido = Mesa::conocerEstadoPedido($codigoPedido, $idMesa);
+    
+    $payload = json_encode(array("estadoPedido" => $estadoPedido));
+
+    $response->getBody()->write($payload);
+    return $response->withHeader('Content-Type', 'application/json');
+  }
+
 }

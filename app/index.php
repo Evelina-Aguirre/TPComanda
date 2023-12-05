@@ -70,7 +70,8 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->get('[/]', \MesaController::class . ':TraerTodos');
     $group->put('[/]', \PedidoController::class . ':ModificarPedido');
 });
-//$app->post('/pendientes', \LoginController::class . ':Ingresar');
+
+$app->get('/cliente', \MesaController::class . ':consultarEstadoPedido');
 
 $app->post('/login', \LoginController::class . ':Ingresar');
 $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');
