@@ -8,12 +8,12 @@ class MesaController extends Usuario// implements IApiUsable
   {
     $parametros = $request->getParsedBody();
 
-    $listaPedidos = $parametros['listaPedidos'];
+    $codigo = $parametros['codigo'];
     $estado = $parametros['estado'];
     $puntaje = $parametros['puntaje'];
 
     $mesa = new Mesa();
-    $mesa->listaPedidos = $listaPedidos;
+    $mesa->codigo = $codigo;
     $mesa->estado = $estado;
     $mesa->puntaje = $puntaje;
     $mesa->crearMesa();
@@ -35,4 +35,6 @@ class MesaController extends Usuario// implements IApiUsable
     return $response
       ->withHeader('Content-Type', 'application/json');
   }
+
+ 
 }

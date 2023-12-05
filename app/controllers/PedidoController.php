@@ -107,10 +107,10 @@ class PedidoController extends Pedido
 
     public function listaPendientes($request, $response, $args)
     {
-        $roll = $args['roll'];
-        printf($roll);
+        $sector = $args['sector'];
+        printf($sector);
 
-        $pedidos = Pedido::listarPedidosPorRol($roll);
+        $pedidos = Pedido::listarPedidosPendientesPorRol($sector);
 
         $response->getBody()->write(json_encode($pedidos));
 

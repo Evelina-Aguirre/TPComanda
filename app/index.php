@@ -61,7 +61,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/listaPendientes', \PedidoController::class . ':listaPendientes');
+    $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes');
 
 });
 
@@ -70,7 +70,7 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->get('[/]', \MesaController::class . ':TraerTodos');
     $group->put('[/]', \PedidoController::class . ':ModificarPedido');
 });
-
+//$app->post('/pendientes', \LoginController::class . ':Ingresar');
 
 $app->post('/login', \LoginController::class . ':Ingresar');
 $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');

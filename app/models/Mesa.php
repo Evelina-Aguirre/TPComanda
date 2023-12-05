@@ -1,22 +1,19 @@
 <?php
 
-/**“con cliente esperando pedido” ,
-*”con cliente comiendo”,
-* “con cliente pagando” y
-* “cerrada”.*/
+
 
 class Mesa
 {
     public $id;
-    public $listaPedidos;
+    public $codigo;
     public $estado;
     public $puntaje;
 
     public function crearMesa()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO mesas (listaPedidos, estado,puntaje) VALUES (:listaPedidos, :estado,:puntaje)");
-        $consulta->bindValue(':listaPedidos', $this->listaPedidos, PDO::PARAM_STR);
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO mesas (codigo, estado,puntaje) VALUES (:codigo, :estado,:puntaje)");
+        $consulta->bindValue(':codigo', $this->codigo, PDO::PARAM_STR);
         $consulta->bindValue(':estado', $this->estado,PDO::PARAM_STR);
         $consulta->bindValue(':puntaje',$this->puntaje,PDO::PARAM_INT);
         $consulta->execute();
@@ -27,38 +24,35 @@ class Mesa
     public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, listaPedidos, estado,puntaje FROM mesas");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, codigo, estado,puntaje FROM mesas");
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
     }
 
-    public function agregarPedido(Pedido $pedido)
-    {
-        $this->listaPedidos[] = $pedido;
 
-        $pedido->actualizarHoraFinalización();
+
+    public static function ActualizarEstado($id,$estado){
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta(
+            "UPDATE mesas SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(":estado",$estado,PDO::PARAM_STR);
+        $consulta->bindValue(":id",$id,PDO::PARAM_INT);
+        $consulta->execute();
     }
 
-    public function actualizarEstadoMesa()
+    public static function mensajeEstadoMesa($estadoPedido)
     {
-        foreach ($this->listaPedidos as $pedido) {
-
-            $pedido->actualizarEstadoYHora();
-        }
-
-        $this->estado = $this->calcularEstadoMesa();
-    }
-
-    private function calcularEstadoMesa()
-    {
-        if (count($this->listaPedidos) > 0 && $this->listaPedidos[0]->estado == "listo para servir") {
+        if ($estadoPedido == "pendiente" || $estadoPedido == "en preparacion") {
             return "con cliente esperando pedido";
         } else {
             return "con cliente comiendo”,"; 
         }
     }
 
-    
+ /**“con cliente esperando pedido” ,
+*”con cliente comiendo”,
+* “con cliente pagando” y
+* “cerrada”.*/
     
 }

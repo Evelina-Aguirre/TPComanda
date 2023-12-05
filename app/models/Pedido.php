@@ -1,4 +1,6 @@
 <?php
+
+require_once "./models/Mesa.php";
 class Pedido
 {
     public $id;
@@ -44,6 +46,8 @@ class Pedido
                 $this->agregarProductoAPedido($productoDetalles);
             }
         }
+        $estadoMesa=Mesa::mensajeEstadoMesa($this->estado);
+        Mesa::ActualizarEstado($this->idMesa,$estadoMesa);
     }
 
     public function agregarProductoAPedido($productoDetalles)
@@ -98,13 +102,13 @@ class Pedido
     public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta( "SELECT *  FROM pedidos ");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT *  FROM pedidos ");
         $consulta->execute();
 
         $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
 
         foreach ($pedidos as $pedido) {
-           
+
             $pedido->idProducto = $pedido->listarProductos();
         }
 
@@ -135,88 +139,84 @@ class Pedido
     public function modificarPedido($id, $tiempoEstimado, $empleadoACargo, $estado = null)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-
-        $consulta = $objAccesoDatos->prepararConsulta("
-        SELECT COUNT(*) as existe
-        FROM listaproductosporpedido
-        WHERE id = :id
-    ");
-        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-        $consulta->execute();
-
-        $existeProducto = $consulta->fetch(PDO::FETCH_ASSOC)['existe'];
-
-        if (!$existeProducto) {
-            throw new Exception("El producto con id $id no existe.");
+        $consultaPedidoId = $objAccesoDatos->prepararConsulta("
+            SELECT idPedido
+            FROM listaproductosporpedido
+            WHERE id = :id
+        ");
+        $consultaPedidoId->bindValue(':id', $id, PDO::PARAM_INT);
+        $consultaPedidoId->execute();
+    
+        $idPedido = $consultaPedidoId->fetch(PDO::FETCH_ASSOC)['idPedido'];
+    
+        if (!$idPedido) {
+            throw new Exception("El producto id $id no está en la lista de pendientes.");
         }
-
-        $updateStatement = "UPDATE listaproductosporpedido SET ";
-        $updateData = array();
-
+    
+        $comandoUpdate = "UPDATE listaproductosporpedido SET ";
+        $updateDato = array();
+    
         if ($tiempoEstimado !== null) {
-            $updateStatement .= "tiempoEstimado = :tiempoEstimado, ";
-            $updateData[':tiempoEstimado'] = $tiempoEstimado;
+            $comandoUpdate .= "tiempoEstimado = :tiempoEstimado, ";
+            $updateDato[':tiempoEstimado'] = $tiempoEstimado;
         }
-
+    
         if ($empleadoACargo !== null) {
-            $updateStatement .= "empleadoACargo = :empleadoACargo, ";
-            $updateData[':empleadoACargo'] = $empleadoACargo;
+            $comandoUpdate .= "empleadoACargo = :empleadoACargo, ";
+            $updateDato[':empleadoACargo'] = $empleadoACargo;
         }
-
+    
         if ($estado !== null) {
-            $updateStatement .= "estado = :estado, ";
-            $updateData[':estado'] = $estado;
+            $comandoUpdate .= "estado = :estado, ";
+            $updateDato[':estado'] = $estado;
         }
-
-
-        $updateStatement = rtrim($updateStatement, ', ');
-
-        $updateStatement .= " WHERE id = :id";
-
-        $consulta = $objAccesoDatos->prepararConsulta($updateStatement);
-
-        foreach ($updateData as $key => $value) {
+    
+        $comandoUpdate = rtrim($comandoUpdate, ', ');
+    
+        $comandoUpdate .= " WHERE id = :id";
+    
+        $consulta = $objAccesoDatos->prepararConsulta($comandoUpdate);
+    
+        foreach ($updateDato as $key => $value) {
             $consulta->bindValue($key, $value);
         }
-
+    
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-
+    
         $consulta->execute();
+    
+        $consultaMesaId = $objAccesoDatos->prepararConsulta("
+        SELECT idMesa
+        FROM pedidos
+        WHERE id = :idPedido
+    ");
+    $consultaMesaId->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+    $consultaMesaId->execute();
 
-        $this->recalcularTiempoEstimado($id);
+    $idMesa = $consultaMesaId->fetch(PDO::FETCH_ASSOC)['idMesa'];
+
+        $this->recalcularTiempoEstimado($idPedido);
+        $estadoMesa=Mesa::mensajeEstadoMesa($estado);
+        var_dump($estado);
+        Mesa::ActualizarEstado($idMesa,$estadoMesa);
     }
+    
 
-    public static function listarPedidosPorRol($roll)
+    public static function listarPedidosPendientesPorRol($sector)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
         $consulta = $objAccesoDatos->prepararConsulta(
-            "SELECT * FROM listaproductosporpedido WHERE empleadoACargo = :roll"
+            "SELECT * FROM listaproductosporpedido WHERE sector = :sector AND estado = 'pendiente' "
         );
-        $consulta->bindValue(':roll', $roll, PDO::PARAM_STR);
+        $consulta->bindValue(':sector', $sector, PDO::PARAM_STR);
         $consulta->execute();
 
         $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
-
-        /*  if (count($resultados) > 0) {
-            $nombreEmpleado = $resultados[0]['empleadoACargo'];
-    
-            $consultaRol = $objAccesoDatos->prepararConsulta(
-                "SELECT roll FROM usuarios WHERE usuario = :nombreEmpleado"
-            );
-            $consultaRol->bindValue(':nombreEmpleado', $nombreEmpleado, PDO::PARAM_STR);
-            $consultaRol->execute();
-    
-            $rolEmpleado = $consultaRol->fetch(PDO::FETCH_ASSOC)['roll'];
-    
-            foreach ($resultados as &$pedido) {
-                $pedido['rolEmpleado'] = $rolEmpleado;
-            }
-        }*/
-
         return $resultados;
     }
+
 
     private function recalcularTiempoEstimado($idPedido)
     {
@@ -232,18 +232,23 @@ class Pedido
         $consulta->execute();
 
         $maxTiempoEstimado = $consulta->fetch(PDO::FETCH_ASSOC)['maxTiempoEstimado'];
-
-        $consulta = $objAccesoDatos->prepararConsulta("
-        UPDATE pedidos
-        SET tiempoEstimado = :maxTiempoEstimado
-        WHERE id = :idPedido
-    ");
-
-        $consulta->bindValue(':maxTiempoEstimado', $maxTiempoEstimado, PDO::PARAM_INT);
-        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
-
-        $consulta->execute();
+       
+        if ($maxTiempoEstimado !== null) {
+    
+            $consulta = $objAccesoDatos->prepararConsulta("
+                UPDATE pedidos
+                SET tiempoEstimado = :maxTiempoEstimado
+                WHERE id = :idPedido
+            ");
+    
+            $consulta->bindValue(':maxTiempoEstimado', $maxTiempoEstimado, PDO::PARAM_INT);
+            $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+    
+            $consulta->execute();
+        }
     }
+   
+    
 
     public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
     {
