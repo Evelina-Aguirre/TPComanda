@@ -11,14 +11,14 @@ class UsuarioController extends Usuario implements IApiUsable
     $nombre = $parametros['nombre'];
     $clave = $parametros['clave'];
     $roll = $parametros['roll'];
-    $fechaAlta=$parametros['fechaAlta'];
+    $fechaAlta = isset($parametros['fechaAlta']) ? $parametros['fechaAlta'] : null;
 
 
     $usr = new Usuario();
     $usr->nombre = $nombre;
     $usr->clave = $clave;
     $usr->roll = $roll;
-    $usr->fechaAlta=$fechaAlta;
+    $usr->fechaAlta = $fechaAlta;
     $usr->crearUsuario();
 
     $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
@@ -32,11 +32,18 @@ class UsuarioController extends Usuario implements IApiUsable
   {
     $usr = $args['nombre'];
     $usuario = Usuario::obtenerUsuario($usr);
-    $payload = json_encode($usuario);
 
-    $response->getBody()->write($payload);
-    return $response
-      ->withHeader('Content-Type', 'application/json');
+    if ($usuario) {
+      $payload = json_encode($usuario);
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    } else {
+      $mensaje = json_encode(array("mensaje" => "Usuario no encontrado"));
+      $response->getBody()->write($mensaje);
+      return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+    }
   }
 
   public function TraerTodos($request, $response, $args)
@@ -57,17 +64,17 @@ class UsuarioController extends Usuario implements IApiUsable
     $nombre = $parametros['nombre'];
     $clave = $parametros['clave'];
     $roll = $parametros['roll'];
-    $fechaAlta=$parametros['fechaAlta'];
-    $fechaBaja=$parametros['fechaBaja'];
-    $estado=$parametros['estado'];
+    $fechaAlta = $parametros['fechaAlta'];
+    $fechaBaja = $parametros['fechaBaja'];
+    $estado = $parametros['estado'];
 
     $usr = new Usuario();
     $usr->nombre = $nombre;
     $usr->clave = $clave;
     $usr->roll = $roll;
-    $usr->fechaAlta=$fechaAlta;
-    $usr->fechaBaja=$fechaBaja;
-    $usr->estado=$estado;
+    $usr->fechaAlta = $fechaAlta;
+    $usr->fechaBaja = $fechaBaja;
+    $usr->estado = $estado;
     $usr->ModificarUsuario($id);
 
     $payload = json_encode(array("mensaje" => "Usuario modificado con exito"));

@@ -26,6 +26,7 @@ class ProductoController extends Producto
     return $response
       ->withHeader('Content-Type', 'application/json');
   }
+
   public function TraerTodos($request, $response, $args)
   {
     $lista = Producto::obtenerTodos();
@@ -47,7 +48,7 @@ class ProductoController extends Producto
       ->withHeader('Content-Type', 'application/json');
   }
 
-  public function ImportarCsv($request, $response, $args)
+  /*public function ImportarCsv($request, $response, $args)
   {
     try {
 
@@ -61,9 +62,10 @@ class ProductoController extends Producto
       $payload = json_encode(array("Error" => $mensaje->getMessage()));
     } finally {
       $response->getBody()->write($payload);
-      return $response->withHeader('Content-Type', 'text/csv');
+      return $response->withHeader('Content-Type', 'text/csv');//devolverarchivo 
     }
   }
+
 
   public function ExportarCsv($request, $response, $args)
   {
@@ -81,5 +83,5 @@ class ProductoController extends Producto
     } finally {
       return $response->withHeader('Content-Type', 'text/csv');
     }
-  }
+  }*/
 }

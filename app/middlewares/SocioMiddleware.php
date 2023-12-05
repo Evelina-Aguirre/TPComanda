@@ -16,7 +16,8 @@ class SocioMiddleware
 
         if (empty($token)) {
             $response = new Response();
-            $response->getBody()->write(json_encode(['Error' => 'Token invalido.']));
+            $response->getBody()->write(json_encode(['Error' => 'El usuario logueado no tiene las credenciales para realizar esta acción. 
+            Intenta loguearte nuevamente.']));
             return $response->withHeader('Content-Type', 'application/json');
         }
         $response = new Response();
@@ -25,14 +26,15 @@ class SocioMiddleware
           
             $datos = AutentificadorJWT::ObtenerData($token);
 
-            if ($datos->roll == "Socio") {
+            if ($datos->roll == "socio") {
                 printf("Quien realiza esta acción es un socio ");
                 $response = $handler->handle($request);
             } else {
                 $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los socios.']));
             }
         } catch (Exception $excepcion) {
-            $response->getBody()->write(json_encode(['Error' => $excepcion->getMessage()]));
+
+            $response->getBody()->write(json_encode(['Error' => 'Credenciales inválidas. Intenta loguearte nuevamente.']));
         }
 
         return $response->withHeader('Content-Type', 'application/json');

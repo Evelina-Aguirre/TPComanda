@@ -24,6 +24,8 @@ class Usuario
         $consulta->bindValue(':clave', $claveHash);
         $consulta->bindValue(':roll', $this->roll, PDO::PARAM_STR);
         //$fechaFormateada = $fecha->format('d-m-Y');
+        if (empty($fecha)) {
+            $fecha = new DateTime();}
         $consulta->bindValue(':fechaAlta', $fecha->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         $consulta->execute();
 
@@ -73,7 +75,12 @@ class Usuario
         $objAccesoDato = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDato->prepararConsulta("UPDATE usuarios SET nombre = :nombre, clave = :clave , roll = :roll, fechaAlta=:fechaAlta,fechaBaja=:fechaBaja, 
         estado =:estado WHERE id = $id");
+        var_dump("intento modificarlo");
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
+        var_dump($this->clave);
+        var_dump($this->nombre);
+        var_dump($this->fechaAlta);
+        var_dump($this->id);
         $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
         $consulta->bindValue(':clave', $claveHash);
         $consulta->bindValue(':roll', $this->roll, PDO::PARAM_STR);
@@ -81,12 +88,13 @@ class Usuario
         $consulta->bindValue(':fechaBaja', $this->fechaBaja ? $this->fechaBaja->format('Y-m-d H:i:s') : null, PDO::PARAM_STR);
         $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
         $consulta->execute();
+
     }
 
 
     public static function borrarUsuario($id)
     {
-        $estado="baja";
+        $estado="INACTIVO";
         $objAccesoDato = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDato->prepararConsulta("UPDATE usuarios SET fechaBaja = :fechaBaja,estado =:estado WHERE id = :id");
         $fecha = new DateTime(date("d-m-Y"));

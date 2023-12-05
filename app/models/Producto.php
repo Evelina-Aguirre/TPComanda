@@ -37,16 +37,21 @@ class Producto
         return $consulta->fetchObject("producto");
     }
 
-    private function obtenerProductoPorId($productoId)
+    public static function obtenerProductoPorId($productoId)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, nombre, precio,  FROM productos WHERE id = :id");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT *  FROM productos WHERE id = :id");
         $consulta->bindValue(':id', $productoId, PDO::PARAM_INT);
         $consulta->execute();
 
         $producto = $consulta->fetch(PDO::FETCH_OBJ);
+        
+        if ($producto !== false && $producto !== null) {
+            return $producto;
+        } else {
+            return null;
+        }
 
-        return $producto;
     }
     
     public static function cargarCSV($path)

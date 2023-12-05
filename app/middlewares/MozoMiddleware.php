@@ -24,7 +24,7 @@ class MozoMiddleware
           
             $datos = AutentificadorJWT::ObtenerData($token);
 
-            if ($datos->roll == "Mozo") {
+            if ($datos->roll == "mozo") {
                 printf("Realiza esta acción un Mozo");
             } else {
                 $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los socios.']));

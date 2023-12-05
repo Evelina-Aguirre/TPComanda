@@ -81,8 +81,7 @@ class PedidoController extends Pedido
     {
         $parametros = $request->getParsedBody();
 
-        $idPedido = $parametros['idPedido'];
-        $idProducto = $parametros['idProducto'];
+        $id = $parametros['id'];
         $tiempoEstimado = $parametros['tiempoEstimado'];
         $empleadoACargo=$parametros['empleadoACargo'];
         $estado=$parametros['estado'];
@@ -90,7 +89,7 @@ class PedidoController extends Pedido
         $pedido = new Pedido();
 
         try {
-            $pedido->modificarPedido($idPedido, $idProducto, $tiempoEstimado,$empleadoACargo,$estado);
+            $pedido->modificarPedido($id, $tiempoEstimado,$empleadoACargo,$estado);
 
             $payload = json_encode(array("mensaje" => "Pedido modificado con éxito"));
             $response->getBody()->write($payload);
@@ -109,6 +108,7 @@ class PedidoController extends Pedido
     public function listaPendientes($request, $response, $args)
     {
         $roll = $args['roll'];
+        printf($roll);
 
         $pedidos = Pedido::listarPedidosPorRol($roll);
 

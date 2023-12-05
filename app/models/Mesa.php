@@ -37,7 +37,7 @@ class Mesa
     {
         $this->listaPedidos[] = $pedido;
 
-        $pedido->actualizarEstadoYHora();
+        $pedido->actualizarHoraFinalización();
     }
 
     public function actualizarEstadoMesa()

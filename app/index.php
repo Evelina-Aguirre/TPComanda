@@ -41,18 +41,18 @@ $app->addBodyParsingMiddleware();
 /// Routes
 $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->get('[/]', \UsuarioController::class . ':TraerTodos');
-    $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
+    $group->get('/{nombre}', \UsuarioController::class . ':TraerUno');
     $group->post('[/]', \UsuarioController::class . ':CargarUno') ->add(new GuardarUsuarioMiddleware())->add(new SocioMiddleware());
     $group->put('[/]', \UsuarioController::class . ':ModificarUno')->add(new SocioMiddleware());
     $group->delete('[/]', \UsuarioController::class . ':BorrarUno')->add(new SocioMiddleware());
 });
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
-    $group->get('/exportarCSV', \ProductoController::class . ':ExportarCsv')->add(new SocioMiddleware());
+    $group->get('/exportarCSV', \ProductoController::class . ':ExportarCsv');//->add(new SocioMiddleware());
     $group->get('[/]', \ProductoController::class . ':TraerTodos');
     $group->get('/{nombre}', \ProductoController::class . ':TraerUno');
     $group->post('[/]', \ProductoController::class . ':CargarUno');
-    $group->post('/importarCSV', \ProductoController::class . ':ImportarCsv')->add(new SocioMiddleware());
+    $group->post('/importarCSV', \ProductoController::class . ':ImportarCsv');//->add(new SocioMiddleware());
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
