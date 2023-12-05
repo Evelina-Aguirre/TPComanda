@@ -12,7 +12,6 @@ class MozoMiddleware
         
         list($tokenType, $token) = sscanf($authorizationHeader, '%s %s');
 
-
         if (empty($token)) {
             $response = new Response();
             $response->getBody()->write(json_encode(['Error' => 'Token invalido.']));
@@ -23,8 +22,7 @@ class MozoMiddleware
         try {
           
             $datos = AutentificadorJWT::ObtenerData($token);
-
-            if ($datos->roll == "mozo") {
+            if ($datos->roll == "Mozo") {
                 printf("Realiza esta acción un Mozo");
             } else {
                 $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los socios.']));

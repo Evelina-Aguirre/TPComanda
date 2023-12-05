@@ -247,7 +247,7 @@ class Pedido
 
 
 
-    public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
+    /* public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
@@ -266,7 +266,7 @@ class Pedido
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
 
         $consulta->execute();
-    }
+    }*/
 
     public static function consultarEstadoPedidoPorId($idPedido)
     {
@@ -326,4 +326,80 @@ class Pedido
         return $consulta->fetchColumn();
     }
 
+    public static function marcarPedidoServido($idPedido)
+    {
+        $objetoAccesoDato = AccesoDatos::obtenerInstancia();
+        $horaActual = date('H:i:s');
+
+        $consulta = $objetoAccesoDato->prepararConsulta("UPDATE pedidos SET estado = 'servido', horaFinalizacion = :horaActual WHERE id = :idPedido");
+        $consulta->bindValue(":horaActual", $horaActual, PDO::PARAM_STR);
+        $consulta->bindValue(":idPedido", $idPedido, PDO::PARAM_INT);
+        $consulta->execute();
+    }
+    public static function obtenerPedidosConDemora()
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+        $consulta = $objAccesoDatos->prepararConsulta("
+            SELECT id, idMesa, estado, codigoPedido, listaProductos, fotoMesa, tiempoEstimado, horaCreacion, horaFinalizacion, precioTotal
+            FROM pedidos WHERE estado = 'servido' ");
+
+        $consulta->execute();
+
+        $pedidosListos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $pedidosConDemora = [];
+
+        foreach ($pedidosListos as $pedido) {
+            $horaCreacion = new DateTime($pedido['horaCreacion']);
+            $horaFinalizacion = new DateTime($pedido['horaFinalizacion']);
+            $tiempoEstimado = $pedido['tiempoEstimado'];
+
+            if (preg_match('/^(\d+):(\d+):(\d+)$/', $tiempoEstimado, $matches)) {
+                $tiempoEstimado = new DateInterval("PT{$matches[1]}H{$matches[2]}M{$matches[3]}S");
+
+                $horaEstimadaEntrega = $horaCreacion->add($tiempoEstimado);
+
+                if ($horaFinalizacion > $horaEstimadaEntrega) {
+                    $pedidosConDemora[] = $pedido;
+                }
+            }
+        }
+
+        return $pedidosConDemora;
+    }
+
+    public static function obtenerPedidosSinDemora()
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+        $consulta = $objAccesoDatos->prepararConsulta("
+            SELECT id, idMesa, estado, codigoPedido, listaProductos, fotoMesa, tiempoEstimado, horaCreacion, horaFinalizacion, precioTotal
+            FROM pedidos
+            WHERE estado = 'servido' 
+        ");
+
+        $consulta->execute();
+
+        $pedidosListos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $pedidosSinDemora = [];
+
+        foreach ($pedidosListos as $pedido) {
+            $horaCreacion = new DateTime($pedido['horaCreacion']);
+            $horaFinalizacion = new DateTime($pedido['horaFinalizacion']);
+            $tiempoEstimado = $pedido['tiempoEstimado'];
+
+
+            if (preg_match('/^(\d+):(\d+):(\d+)$/', $tiempoEstimado, $matches)) {
+                $tiempoEstimado = new DateInterval("PT{$matches[1]}H{$matches[2]}M{$matches[3]}S");
+
+                $horaEstimadaEntrega = $horaCreacion->add($tiempoEstimado);
+
+                if ($horaFinalizacion <= $horaEstimadaEntrega) {
+                    $pedidosSinDemora[] = $pedido;
+                }
+            }
+        }
+
+        return $pedidosSinDemora;
+    }
 }

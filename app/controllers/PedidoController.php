@@ -81,10 +81,10 @@ class PedidoController extends Pedido
     {
         $parametros = $request->getParsedBody();
 
-        $id = $parametros['id'];
-        $tiempoEstimado = $parametros['tiempoEstimado'];
-        $empleadoACargo = $parametros['empleadoACargo'];
-        $estado = $parametros['estado'];
+        $id = $parametros['id'] ?? null;
+        $tiempoEstimado = $parametros['tiempoEstimado'] ?? null;
+        $empleadoACargo = $parametros['empleadoACargo'] ?? null;
+        $estado = $parametros['estado'] ?? null;
 
         $pedido = new Pedido();
 
@@ -128,6 +128,7 @@ class PedidoController extends Pedido
             foreach ($pedidosListos as $idPedido) {
                 $idMesa = Pedido::buscarIdMesadeunPedido($idPedido);
                 Mesa::ActualizarEstado($idMesa, 'con cliente comiendo');
+                Pedido::marcarPedidoServido($idPedido);
             }
 
             $successPayload = json_encode(array("mensaje" => "Pedidos servidos."));
@@ -139,4 +140,47 @@ class PedidoController extends Pedido
         $response->getBody()->write($infoPayload);
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function pedidosConDemora($request, $response, $args)
+    {
+        try {
+            $pedidosConDemora = Pedido::obtenerPedidosConDemora();
+        
+            $response = $response->withHeader('Content-Type', 'application/json');
+            if (!empty($pedidosConDemora)) {
+                $response->getBody()->write(json_encode($pedidosConDemora));
+            } else {
+                $response->getBody()->write(json_encode(['mensaje' => 'No hubo pedidos con demora.']));
+            }
+        
+            return $response;
+        } catch (Exception $e) {
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+        
+            return $response;
+        }
+    }
+    
+    public function pedidosSinDemora($request, $response, $args)
+    {
+        try {
+            $pedidosSinDemora = Pedido::obtenerPedidosSinDemora();
+        
+            $response = $response->withHeader('Content-Type', 'application/json');
+            if (!empty($pedidosSinDemora)) {
+                $response->getBody()->write(json_encode($pedidosSinDemora));
+            } else {
+                $response->getBody()->write(json_encode(['mensaje' => 'No se encontraron pedidos sin demora.']));
+            }
+        
+            return $response;
+        } catch (Exception $e) {
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+        
+            return $response;
+        }
+    }
+    
 }

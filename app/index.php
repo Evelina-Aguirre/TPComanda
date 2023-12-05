@@ -81,6 +81,10 @@ $app->get('/cerrarMesa/{idMesa}',  \MesaController::class . ':cerrarMesa');
 $app->post('/encuesta',  \EncuestaController::class . ':CargarUno');
 $app->get('/mejoresEncuestas',  \EncuestaController::class . ':TraerEncuestas');
 
+//PEDIDOS CON/SIN DEMORA
+$app->get('/pedidosConDemora',  \PedidoController::class . ':pedidosConDemora');
+$app->get('/pedidosSinDemora',  \PedidoController::class . ':pedidosSinDemora');
+
 $app->post('/login', \LoginController::class . ':Ingresar');
 $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');
 
