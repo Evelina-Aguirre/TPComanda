@@ -46,8 +46,8 @@ class Pedido
                 $this->agregarProductoAPedido($productoDetalles);
             }
         }
-        $estadoMesa=Mesa::mensajeEstadoMesa($this->estado);
-        Mesa::ActualizarEstado($this->idMesa,$estadoMesa);
+        $estadoMesa = Mesa::mensajeEstadoMesa($this->estado);
+        Mesa::ActualizarEstado($this->idMesa, $estadoMesa);
     }
 
     public function agregarProductoAPedido($productoDetalles)
@@ -146,61 +146,58 @@ class Pedido
         ");
         $consultaPedidoId->bindValue(':id', $id, PDO::PARAM_INT);
         $consultaPedidoId->execute();
-    
+
         $idPedido = $consultaPedidoId->fetch(PDO::FETCH_ASSOC)['idPedido'];
-    
+
         if (!$idPedido) {
             throw new Exception("El producto id $id no está en la lista de pendientes.");
         }
-    
+
         $comandoUpdate = "UPDATE listaproductosporpedido SET ";
         $updateDato = array();
-    
+
         if ($tiempoEstimado !== null) {
             $comandoUpdate .= "tiempoEstimado = :tiempoEstimado, ";
             $updateDato[':tiempoEstimado'] = $tiempoEstimado;
         }
-    
+
         if ($empleadoACargo !== null) {
             $comandoUpdate .= "empleadoACargo = :empleadoACargo, ";
             $updateDato[':empleadoACargo'] = $empleadoACargo;
         }
-    
+
         if ($estado !== null) {
             $comandoUpdate .= "estado = :estado, ";
             $updateDato[':estado'] = $estado;
         }
-    
+
         $comandoUpdate = rtrim($comandoUpdate, ', ');
-    
+
         $comandoUpdate .= " WHERE id = :id";
-    
+
         $consulta = $objAccesoDatos->prepararConsulta($comandoUpdate);
-    
+
         foreach ($updateDato as $key => $value) {
             $consulta->bindValue($key, $value);
         }
-    
+
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-    
+
         $consulta->execute();
-    
+
         $consultaMesaId = $objAccesoDatos->prepararConsulta("
         SELECT idMesa
         FROM pedidos
         WHERE id = :idPedido
     ");
-    $consultaMesaId->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
-    $consultaMesaId->execute();
+        $consultaMesaId->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consultaMesaId->execute();
 
-    $idMesa = $consultaMesaId->fetch(PDO::FETCH_ASSOC)['idMesa'];
+        $idMesa = $consultaMesaId->fetch(PDO::FETCH_ASSOC)['idMesa'];
 
         $this->recalcularTiempoEstimado($idPedido);
-        $estadoMesa=Mesa::mensajeEstadoMesa($estado);
-        var_dump($estado);
-        Mesa::ActualizarEstado($idMesa,$estadoMesa);
     }
-    
+
 
     public static function listarPedidosPendientesPorRol($sector)
     {
@@ -232,23 +229,23 @@ class Pedido
         $consulta->execute();
 
         $maxTiempoEstimado = $consulta->fetch(PDO::FETCH_ASSOC)['maxTiempoEstimado'];
-       
+
         if ($maxTiempoEstimado !== null) {
-    
+
             $consulta = $objAccesoDatos->prepararConsulta("
                 UPDATE pedidos
                 SET tiempoEstimado = :maxTiempoEstimado
                 WHERE id = :idPedido
             ");
-    
+
             $consulta->bindValue(':maxTiempoEstimado', $maxTiempoEstimado, PDO::PARAM_INT);
             $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
-    
+
             $consulta->execute();
         }
     }
-   
-    
+
+
 
     public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
     {
@@ -269,5 +266,63 @@ class Pedido
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
 
         $consulta->execute();
+    }
+
+    public static function consultarEstadoPedidoPorId($idPedido)
+    {
+
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("
+            SELECT estado
+            FROM listaproductosporpedido
+            WHERE idPedido = :idPedido
+        ");
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public static function verificarPedidosListos()
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("
+            SELECT DISTINCT idPedido
+            FROM listaproductosporpedido
+        ");
+        $consulta->execute();
+
+        $pedidosListos = [];
+
+        while ($idPedido = $consulta->fetchColumn()) {
+            $estadosProductos = Pedido::consultarEstadoPedidoPorId($idPedido);
+
+            if (is_array($estadosProductos)) {
+                $productosListos = array_filter($estadosProductos, function ($producto) {
+                    return $producto === 'listo para servir';
+                });
+
+                if (count($productosListos) === count($estadosProductos)) {
+                    $pedidosListos[] = $idPedido;
+                }
+            } else {
+                if ($estadosProductos === 'listo para servir') {
+                    $pedidosListos[] = $idPedido;
+                }
+            }
+        }
+
+        return $pedidosListos;
+    }
+
+    public static function buscarIdMesadeunPedido($idPedido)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta(" SELECT idMesa FROM pedidos WHERE id = :idPedido
+    ");
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchColumn();
     }
 }

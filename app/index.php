@@ -69,6 +69,8 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->post('[/]', \MesaController::class . ':CargarUno');
     $group->get('[/]', \MesaController::class . ':TraerTodos');
     $group->put('[/]', \PedidoController::class . ':ModificarPedido');
+    $group->get('/servirpedidos', \PedidoController::class . ':servirPedido');
+
 });
 
 $app->get('/cliente', \MesaController::class . ':consultarEstadoPedido');

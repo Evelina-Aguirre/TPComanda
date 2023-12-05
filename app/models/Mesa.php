@@ -47,8 +47,6 @@ class Mesa
     {
         if ($estadoPedido == "pendiente" || $estadoPedido == "en preparacion") {
             return "con cliente esperando pedido";
-        } else {
-            return "con cliente comiendo”,";
         }
     }
     /**“con cliente esperando pedido” ,
@@ -56,7 +54,7 @@ class Mesa
      * “con cliente pagando” y
      * “cerrada”.*/
 
-    public static function conocerEstadoPedido($codigoPedido,$idMesa)
+    public static function conocerEstadoPedido($codigoPedido, $idMesa)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT codigoPedido, horaCreacion,horaFinalizacion,precioTotal,estado,tiempoEstimado
@@ -69,14 +67,14 @@ class Mesa
     }
 
     public static function obtenerIdMesaPorCodigo($codigo)
-{
-    $objAccesoDatos = AccesoDatos::obtenerInstancia();
-    $consulta = $objAccesoDatos->prepararConsulta("SELECT id FROM mesas WHERE codigo = :codigo");
-    $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
-    $consulta->execute();
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id FROM mesas WHERE codigo = :codigo");
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->execute();
 
-    return $consulta->fetchColumn();
+        return $consulta->fetchColumn();
+    }
+
+
 }
-
-}
-

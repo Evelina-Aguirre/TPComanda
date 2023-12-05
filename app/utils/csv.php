@@ -46,5 +46,32 @@ class Csv
             }
         }
     }
+
+    public static function DescargarCsv($request,$response,$args)
+    {
+        $archivoAdescargar = $request->getAttribute('destino');
+
+        if (file_exists($archivoAdescargar)) 
+        {
+            //encabezados para la descarga
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($archivoAdescargar) . '"');
+            header('Content-Length: ' . filesize($archivoAdescargar));
+
+            // Lee el archivo y lo envía al navegador
+            readfile($archivoAdescargar);
+            $msj = "Descargado...";
+        } 
+        else 
+        {
+            $msj = 'El archivo no existe';
+        }
+
+        $payload = json_encode(array("mensaje" => $msj));
+        $response->getBody()->write($payload);
+
+        return $response;
+
+    }
 }
 ?>

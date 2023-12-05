@@ -61,18 +61,18 @@ class PedidoController extends Pedido
             ->withHeader('Content-Type', 'application/json');
     }
 
- 
+
     public function actualizarEstadoPedidoMesa($request, $response, $args)
     {
         $idPedido = $args['idPedido'];
-        $horaFinalizacion=$args['horaFinalizacion'];
+        $horaFinalizacion = $args['horaFinalizacion'];
 
         if (Pedido::actualizarHoraFinalización($idPedido, $horaFinalizacion)) {
             $payload = json_encode(array("mensaje" => "Estado y hora del pedido actualizados correctamente."));
         } else {
             $payload = json_encode(array("error" => "Pedido no encontrado o no es necesario actualizar."));
         }
-    
+
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -83,13 +83,13 @@ class PedidoController extends Pedido
 
         $id = $parametros['id'];
         $tiempoEstimado = $parametros['tiempoEstimado'];
-        $empleadoACargo=$parametros['empleadoACargo'];
-        $estado=$parametros['estado'];
+        $empleadoACargo = $parametros['empleadoACargo'];
+        $estado = $parametros['estado'];
 
         $pedido = new Pedido();
 
         try {
-            $pedido->modificarPedido($id, $tiempoEstimado,$empleadoACargo,$estado);
+            $pedido->modificarPedido($id, $tiempoEstimado, $empleadoACargo, $estado);
 
             $payload = json_encode(array("mensaje" => "Pedido modificado con éxito"));
             $response->getBody()->write($payload);
@@ -114,6 +114,29 @@ class PedidoController extends Pedido
 
         $response->getBody()->write(json_encode($pedidos));
 
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+
+
+    public function servirPedido($request, $response, $args)
+    {
+
+        $pedidosListos = Pedido::verificarPedidosListos();
+
+        if (!empty($pedidosListos)) {
+            foreach ($pedidosListos as $idPedido) {
+                $idMesa = Pedido::buscarIdMesadeunPedido($idPedido);
+                Mesa::ActualizarEstado($idMesa, 'con cliente comiendo');
+            }
+
+            $successPayload = json_encode(array("mensaje" => "Pedidos servidos."));
+            $response->getBody()->write($successPayload);
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+
+        $infoPayload = json_encode(array("mensaje" => "No hay pedidos listos para servir"));
+        $response->getBody()->write($infoPayload);
         return $response->withHeader('Content-Type', 'application/json');
     }
 }
