@@ -325,4 +325,5 @@ class Pedido
 
         return $consulta->fetchColumn();
     }
+
 }

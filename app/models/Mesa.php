@@ -1,7 +1,6 @@
 <?php
 
 
-
 class Mesa
 {
     public $id;
@@ -74,6 +73,16 @@ class Mesa
         $consulta->execute();
 
         return $consulta->fetchColumn();
+    }
+
+    public static function mesaMasUsada()
+    {
+        $objetoAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objetoAccesoDatos->prepararConsulta("SELECT idMesa, COUNT(*) as cantidadPedidos 
+        FROM pedidos GROUP BY idMesa ORDER BY cantidadPedidos DESC LIMIT 1");
+        $consulta->execute();
+    
+        return $consulta->fetch(PDO::FETCH_ASSOC);
     }
 
 

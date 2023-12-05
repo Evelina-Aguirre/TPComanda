@@ -15,7 +15,8 @@ require_once './controllers/UsuarioController.php';
 require_once './controllers/ProductoController.php';
 require_once './controllers/PedidoController.php';
 require_once './controllers/MesaController.php';
-//require_once './db/AccesoDatos.php';
+require_once './controllers/EncuestaController.php';
+
 require_once './middlewares/LoggerMiddleware.php';
 require_once './middlewares/AuthMiddleware.php';
 require_once './middlewares/GuardarUsuarioMiddleware.php';
@@ -69,11 +70,16 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->post('[/]', \MesaController::class . ':CargarUno');
     $group->get('[/]', \MesaController::class . ':TraerTodos');
     $group->put('[/]', \PedidoController::class . ':ModificarPedido');
-    $group->get('/servirpedidos', \PedidoController::class . ':servirPedido');
+    $group->get('/masusada', \MesaController::class . ':mesaMasUsada');
 
 });
 
+$app->get('/servirpedidos', \PedidoController::class . ':servirPedido');
 $app->get('/cliente', \MesaController::class . ':consultarEstadoPedido');
+$app->get('/cobrar/{idPedido}',  \MesaController::class . ':cobrar');
+$app->get('/cerrarMesa/{idMesa}',  \MesaController::class . ':cerrarMesa');
+$app->post('/encuesta',  \EncuestaController::class . ':CargarUno');
+$app->get('/mejoresEncuestas',  \EncuestaController::class . ':TraerEncuestas');
 
 $app->post('/login', \LoginController::class . ':Ingresar');
 $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');
@@ -82,9 +88,8 @@ $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');
 $app->get('[/]', function (Request $request, Response $response) {    
     $payload = json_encode(array("mensaje" => "TP COMANDA"));
     
-    // Pausa para probar el middleware (5 segundos)
-    sleep(3);
-    
+    sleep(3); 
+
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 })->add(new LoggerMiddleware())->add(\LoggerMiddleware::class . ':VerificarRol');
