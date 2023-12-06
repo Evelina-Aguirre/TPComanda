@@ -6,8 +6,8 @@ class Login
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, clave FROM usuarios WHERE usuario = :usuario");
-        $consulta->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, clave FROM usuarios WHERE nombre = :nombre");
+        $consulta->bindValue(':nombre', $usuario, PDO::PARAM_STR);
         $consulta->execute();
 
         $resultado = $consulta->fetch(PDO::FETCH_ASSOC);

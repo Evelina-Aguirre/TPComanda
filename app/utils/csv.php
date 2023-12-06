@@ -2,64 +2,64 @@
 
 class Csv
 {
-    public static function ExportarCSV($path, $lista)
+    public static function CargarCsv($request, $response,$args)
     {
-        $file = fopen($path, "w");
-        foreach($lista as $item)
-        {
-            $separado= implode(",", (array)$item);  
-            if($file)
-            {
-                fwrite($file, $separado.",\r\n"); 
-            }                           
-        }
-        fclose($file);  
-        return $path;     
+
+        $files = $request->getUploadedFiles();   
+
+        $csv = $files['csv'];
+        $destino = $request->getAttribute('destino');
+        $csv->moveTo($destino);
+
+        $payload = json_encode(array("mensaje" => 'Se cargo exitosamente'));
+        $response->getBody()->write($payload);
+
+        return $response;
+
     }
 
-    public static function ImportarCSV($path)
+    public static function LeerCsv($request, $response,$args)
     {
-        $aux = fopen($path, "r");
-        $array = [];
-        if(isset($aux))
+        $destino = $request->getAttribute('destino');
+
+        $entidad = array();
+
+        if(file_exists($destino) &&
+         ($archivo = fopen($destino,"r")) !== FALSE)
         {
-            try
+            $primerIteracion = false; 
+            while (($fila = fgetcsv($archivo,1000,',')) !== FALSE) 
             {
-                while(!feof($aux))
+                if($primerIteracion)
                 {
-                    $datos = fgets($aux);                        
-                    if(!empty($datos))
-                    {          
-                        array_push($array, $datos);                                                
-                    }
+                    array_push($entidad,$fila);
                 }
-            }
-            catch(Exception $e)
-            {
-                echo "Error:";
-                echo $e;
-            }
-            finally
-            {
-                fclose($aux);
-                return $array;
+                $primerIteracion = true;
             }
         }
+
+        fclose($archivo);
+
+        $payload = json_encode(array("mensaje" => $entidad));
+        $response->getBody()->write($payload);
+
+        return $response;
+
     }
 
     public static function DescargarCsv($request,$response,$args)
     {
-        $archivoAdescargar = $request->getAttribute('destino');
+        $archivo_a_descargar = $request->getAttribute('destino');
 
-        if (file_exists($archivoAdescargar)) 
+    
+        if (file_exists($archivo_a_descargar)) 
         {
-            //encabezados para la descarga
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="' . basename($archivoAdescargar) . '"');
-            header('Content-Length: ' . filesize($archivoAdescargar));
+            header('Content-Disposition: attachment; filename="' . basename($archivo_a_descargar) . '"');
+            header('Content-Length: ' . filesize($archivo_a_descargar));
 
-            // Lee el archivo y lo envía al navegador
-            readfile($archivoAdescargar);
+
+            readfile($archivo_a_descargar);
             $msj = "Descargado...";
         } 
         else 
@@ -73,5 +73,7 @@ class Csv
         return $response;
 
     }
+
 }
+
 ?>

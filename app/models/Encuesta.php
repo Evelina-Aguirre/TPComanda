@@ -53,4 +53,22 @@
          return $encuestasFiltradas;
      }
 
+     public static function TraerTodasLasEncuestas()
+    {
+        $objetoAccesoDato = AccesoDatos::obtenerInstancia();
+        $consulta = $objetoAccesoDato->prepararConsulta("SELECT COUNT(*) AS total FROM encuestas");
+        $consulta->execute();
+        return $consulta->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    public static function TraerEncuestasPositivas()
+    {
+        return self::TraerEncuestasConPromedio(7);
+    }
+
+    public static function TraerEncuestasNegativas()
+    {
+        return self::TraerEncuestasConPromedio(7, false);
+    }
+
  }

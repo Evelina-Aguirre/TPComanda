@@ -1,36 +1,72 @@
 <?php
 require_once './models/Encuesta.php';
-class EncuestaController extends Encuesta 
+class EncuestaController extends Encuesta
+{
+    public function CargarUno($request, $response, $args)
     {
-        public function CargarUno($request, $response, $args)
-        {
+        $encuesta = new Encuesta();
 
-            $encuesta = new Encuesta();
-            $encuesta->codigoPedido= $request->getAttribute('codigoPedido');
-            $encuesta->codigoMesa= $request->getAttribute('codigoMesa');
-            $encuesta->mesa = $request->getAttribute('puntuacionMesa');
-            $encuesta->restaurante = $request->getAttribute('puntuacionRestaurante');
-            $encuesta->mozo= $request->getAttribute('puntuacionMozo');
-            $encuesta->cocinero= $request->getAttribute('puntuacionCocinero');
-            $encuesta->texto= $request->getAttribute('texto');
+        $parsedBody = $request->getParsedBody();
+
+        $encuesta->codigoPedido = $parsedBody['codigoPedido'] ?? null;
+        $encuesta->codigoMesa = $parsedBody['codigoMesa'] ?? null;
+        $encuesta->mesa = $parsedBody['puntuacionMesa'] ?? null;
+        $encuesta->restaurante = $parsedBody['puntuacionRestaurante'] ?? null;
+        $encuesta->mozo = $parsedBody['puntuacionMozo'] ?? null;
+        $encuesta->cocinero = $parsedBody['puntuacionCocinero'] ?? null;
+        $encuesta->texto = $parsedBody['texto'] ?? null;
+
+        if (
+            $encuesta->codigoPedido !== null &&
+            $encuesta->codigoMesa !== null &&
+            $encuesta->mesa !== null &&
+            $encuesta->restaurante !== null &&
+            $encuesta->mozo !== null &&
+            $encuesta->cocinero !== null &&
+            $encuesta->texto !== null
+        ) {
             $encuesta->CrearEncuesta();
-
-            $msj = $encuesta->CrearEncuesta() ? "Encuesta creada con exito." : "No se pudo crear la encuesta. ";
-
-            $payload = json_encode(array("mensaje" => $msj));
-            $response->getBody()->write($payload);
-
-            return $response;
+            $msj = "Encuesta creada con éxito.";
+        } else {
+            $msj = "No se pudo crear la encuesta. Faltan datos en la solicitud.";
         }
 
-        public function TraerEncuestas($request, $response, $args)
-        {
-            $encuestas = Encuesta::TraerEncuestasConPromedio(7);
-            $payload = json_encode($encuestas);
-            $response->getBody()->write($payload);
-    
-            return $response->withHeader('Content-Type', 'application/json');
-        }
-        
+        $payload = json_encode(["mensaje" => $msj]);
+        $response->getBody()->write($payload);
 
+        return $response;
     }
+
+    public function TraerEncuestas($request, $response, $args)
+    {
+        $encuestas = Encuesta::TraerEncuestasConPromedio(7);
+        $payload = json_encode($encuestas);
+        $response->getBody()->write($payload);
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function TraerTotalEncuestas($request, $response, $args)
+    {
+        $totalEncuestas = Encuesta::TraerTodasLasEncuestas();
+        $payload = json_encode(array("total" => $totalEncuestas));
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function TraerEstadisticasEncuestas($request, $response, $args)
+    {
+        $totalEncuestas = Encuesta::TraerTodasLasEncuestas();
+        $encuestasPositivas = Encuesta::TraerEncuestasPositivas();
+        $encuestasNegativas = Encuesta::TraerEncuestasNegativas();
+
+        $payload = json_encode(array(
+            "total" => $totalEncuestas,
+            "positivas" => count($encuestasPositivas),
+            "negativas" => count($encuestasNegativas)
+        ));
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+}

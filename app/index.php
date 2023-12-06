@@ -16,6 +16,8 @@ require_once './controllers/ProductoController.php';
 require_once './controllers/PedidoController.php';
 require_once './controllers/MesaController.php';
 require_once './controllers/EncuestaController.php';
+require_once './controllers/LoginController.php';
+require_once './controllers/PDFController.php';
 
 require_once './middlewares/LoggerMiddleware.php';
 require_once './middlewares/AuthMiddleware.php';
@@ -23,6 +25,7 @@ require_once './middlewares/GuardarUsuarioMiddleware.php';
 require_once './middlewares/SocioMiddleware.php';
 require_once './middlewares/MozoMiddleware.php';
 require_once './middlewares/ClienteMiddleware.php';
+
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -49,11 +52,11 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
-    $group->get('/exportarCSV', \ProductoController::class . ':ExportarCsv');//->add(new SocioMiddleware());
+    $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV');//->add(new SocioMiddleware());
     $group->get('[/]', \ProductoController::class . ':TraerTodos');
     $group->get('/{nombre}', \ProductoController::class . ':TraerUno');
     $group->post('[/]', \ProductoController::class . ':CargarUno');
-    $group->post('/importarCSV', \ProductoController::class . ':ImportarCsv');//->add(new SocioMiddleware());
+    $group->post('/cargarCSV', \ProductoController::class . ':cargarProductosDesdeCSV');//->add(new SocioMiddleware());
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
@@ -80,10 +83,17 @@ $app->get('/cobrar/{idPedido}',  \MesaController::class . ':cobrar');
 $app->get('/cerrarMesa/{idMesa}',  \MesaController::class . ':cerrarMesa');
 $app->post('/encuesta',  \EncuestaController::class . ':CargarUno');
 $app->get('/mejoresEncuestas',  \EncuestaController::class . ':TraerEncuestas');
+$app->get('/estadisticas',  \EncuestaController::class . ':TraerEncuestas');
+$app->post('/cargarPDF', \pdfController::class . ':cargarPDF');
+$app->get('/descargarPDF', \pdfController::class . ':descargarPDF');
 
 //PEDIDOS CON/SIN DEMORA
 $app->get('/pedidosConDemora',  \PedidoController::class . ':pedidosConDemora');
 $app->get('/pedidosSinDemora',  \PedidoController::class . ':pedidosSinDemora');
+
+//ENCUESTAS
+$app->get('/encuestastotal', \EncuestaController::class . ':TraerTotalEncuestas');
+$app->get('/encuestasEstadisticas', \EncuestaController::class . ':TraerEstadisticasEncuestas');
 
 $app->post('/login', \LoginController::class . ':Ingresar');
 $app->get('/cerrarSesion', \LoginController::class . ':Deslogear');

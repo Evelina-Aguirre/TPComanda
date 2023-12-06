@@ -7,10 +7,10 @@ class LoginController extends Login
     public function Ingresar($request, $response, $args)
     {
         $parametros = $request->getParsedBody();
-        $usuario = $parametros['usuario'];
+        $nombre = $parametros['nombre'];
         $clave = $parametros['clave'];
 
-        $id = Login::verificarCredenciales($usuario, $clave);
+        $id = Login::verificarCredenciales($nombre, $clave);
 
         if ($id !== false) {
 

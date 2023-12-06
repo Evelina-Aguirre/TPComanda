@@ -247,7 +247,7 @@ class Pedido
 
 
 
-    /* public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
+     public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
@@ -266,7 +266,7 @@ class Pedido
         $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
 
         $consulta->execute();
-    }*/
+    }
 
     public static function consultarEstadoPedidoPorId($idPedido)
     {

@@ -73,14 +73,11 @@ class Usuario
     public function modificarUsuario($id)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuarios SET nombre = :nombre, clave = :clave , roll = :roll, fechaAlta=:fechaAlta,fechaBaja=:fechaBaja, 
-        estado =:estado WHERE id = $id");
-        var_dump("intento modificarlo");
+        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuarios SET nombre = :nombre, clave = :clave , roll = :roll, 
+        fechaAlta=:fechaAlta,fechaBaja=:fechaBaja,  estado =:estado WHERE id = $id");
+
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
-        var_dump($this->clave);
-        var_dump($this->nombre);
-        var_dump($this->fechaAlta);
-        var_dump($this->id);
+  
         $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
         $consulta->bindValue(':clave', $claveHash);
         $consulta->bindValue(':roll', $this->roll, PDO::PARAM_STR);

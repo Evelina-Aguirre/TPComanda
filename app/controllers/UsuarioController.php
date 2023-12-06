@@ -61,12 +61,12 @@ class UsuarioController extends Usuario implements IApiUsable
     $parametros = $request->getParsedBody();
 
     $id = $parametros['id'];
-    $nombre = $parametros['nombre'];
-    $clave = $parametros['clave'];
-    $roll = $parametros['roll'];
-    $fechaAlta = $parametros['fechaAlta'];
-    $fechaBaja = $parametros['fechaBaja'];
-    $estado = $parametros['estado'];
+    $nombre = isset($parametros['nombre']) ? $parametros['nombre'] : null;
+    $clave = isset($parametros['clave']) ? $parametros['clave'] : null;
+    $roll = isset($parametros['roll']) ? $parametros['roll'] : null;
+    $fechaAlta = isset($parametros['fechaAlta']) ? $parametros['fechaAlta'] : null;
+    $fechaBaja = isset($parametros['fechaBaja']) ? $parametros['fechaBaja'] : null;
+    $estado = isset($parametros['estado']) ? $parametros['estado'] : null;
 
     $usr = new Usuario();
     $usr->nombre = $nombre;
@@ -77,11 +77,11 @@ class UsuarioController extends Usuario implements IApiUsable
     $usr->estado = $estado;
     $usr->ModificarUsuario($id);
 
-    $payload = json_encode(array("mensaje" => "Usuario modificado con exito"));
+    $payload = json_encode(array("mensaje" => "Usuario modificado con éxito"));
 
     $response->getBody()->write($payload);
     return $response
-      ->withHeader('Content-Type', 'application/json');
+        ->withHeader('Content-Type', 'application/json');
   }
 
   public function BorrarUno($request, $response, $args)
