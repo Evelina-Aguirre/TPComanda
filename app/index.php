@@ -18,6 +18,7 @@ require_once './controllers/MesaController.php';
 require_once './controllers/EncuestaController.php';
 require_once './controllers/LoginController.php';
 require_once './controllers/PDFController.php';
+require_once './controllers/fpdfController.php';
 
 require_once './middlewares/LoggerMiddleware.php';
 require_once './middlewares/AuthMiddleware.php';
@@ -84,8 +85,12 @@ $app->get('/cerrarMesa/{idMesa}',  \MesaController::class . ':cerrarMesa');
 $app->post('/encuesta',  \EncuestaController::class . ':CargarUno');
 $app->get('/mejoresEncuestas',  \EncuestaController::class . ':TraerEncuestas');
 $app->get('/estadisticas',  \EncuestaController::class . ':TraerEncuestas');
-$app->post('/cargarPDF', \pdfController::class . ':cargarPDF');
-$app->get('/descargarPDF', \pdfController::class . ':descargarPDF');
+
+//PDF
+$app->post('/cargarPDF', \fpdfController::class . ':cargarPDF');
+$app->get('/descargarPDF', \fpdfController::class . ':descargarFPDF');
+$app->get('/mostrarPDF', \fpdfController::class . ':mostrarPDF');
+
 
 //PEDIDOS CON/SIN DEMORA
 $app->get('/pedidosConDemora',  \PedidoController::class . ':pedidosConDemora');
