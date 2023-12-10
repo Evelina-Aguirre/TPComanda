@@ -20,7 +20,7 @@ require_once './controllers/LoginController.php';
 require_once './controllers/PDFController.php';
 require_once './controllers/fpdfController.php';
 
-require_once './middlewares/LoggerMiddleware.php';
+require_once './middlewares/RegistroAccionesMiddleware.php';
 require_once './middlewares/AuthMiddleware.php';
 require_once './middlewares/GuardarUsuarioMiddleware.php';
 require_once './middlewares/SocioMiddleware.php';
@@ -61,7 +61,7 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
-    $group->post('[/]', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware());
+    $group->post('[/]', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
@@ -86,7 +86,11 @@ $app->post('/encuesta',  \EncuestaController::class . ':CargarUno');
 $app->get('/mejoresEncuestas',  \EncuestaController::class . ':TraerEncuestas');
 $app->get('/estadisticas',  \EncuestaController::class . ':TraerEncuestas');
 
-//PDF
+//CSV
+$app->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV');
+$app->post('/cargarCsv', \ProductoController::class . ':CargarUnoProductoCsv');
+
+//PDF descargarProductosDesdeCSV
 $app->post('/cargarPDF', \fpdfController::class . ':cargarPDF');
 $app->get('/descargarPDF', \fpdfController::class . ':descargarFPDF');
 $app->get('/mostrarPDF', \fpdfController::class . ':mostrarPDF');
@@ -111,7 +115,7 @@ $app->get('[/]', function (Request $request, Response $response) {
 
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
-})->add(new LoggerMiddleware())->add(\LoggerMiddleware::class . ':VerificarRol');
+});
 
 
 

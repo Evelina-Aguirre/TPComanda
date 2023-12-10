@@ -28,7 +28,7 @@ class fpdfController
         
             $pdf->Ln(); 
         
-            $pdf->Cell(0, 10, 'Texto: ' . $encuesta->texto);
+            $pdf->Cell(0, 10, 'Opinión: ' . $encuesta->texto);
         }
 
         $pdf->Output("encuestas.pdf", "D");
@@ -56,7 +56,7 @@ class fpdfController
         
             $pdf->Ln(); 
         
-            $pdf->Cell(0, 10, 'Texto: ' . $encuesta->texto);
+            $pdf->Cell(0, 10, 'Opinión: ' . $encuesta->texto);
         }
 
         $pdf->Output("encuestas.pdf", "I");
