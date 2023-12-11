@@ -45,25 +45,28 @@ $app->addBodyParsingMiddleware();
 
 /// Routes
 $app->group('/usuarios', function (RouteCollectorProxy $group) {
-    $group->get('[/]', \UsuarioController::class . ':TraerTodos');
-    $group->get('/{nombre}', \UsuarioController::class . ':TraerUno');
-    $group->post('[/]', \UsuarioController::class . ':CargarUno') ->add(new GuardarUsuarioMiddleware())->add(new SocioMiddleware());
-    $group->put('[/]', \UsuarioController::class . ':ModificarUno')->add(new SocioMiddleware());
-    $group->delete('[/]', \UsuarioController::class . ':BorrarUno')->add(new SocioMiddleware());
-});
+    $group->get('/listarUsuarios', \UsuarioController::class . ':TraerTodos');
+    $group->get('/mostrarUsuario/{nombre}', \UsuarioController::class . ':TraerUno');
+    $group->post('/crearUsuario', \UsuarioController::class . ':CargarUno') ->add(new GuardarUsuarioMiddleware())->add(new SocioMiddleware());
+    $group->put('/modificarUsuario', \UsuarioController::class . ':ModificarUno')->add(new SocioMiddleware());
+    $group->delete('/bajaUsuario', \UsuarioController::class . ':BorrarUno')->add(new SocioMiddleware());
+})->add(new RegistroAccionesMiddleware());
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
-    $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV');//->add(new SocioMiddleware());
-    $group->get('[/]', \ProductoController::class . ':TraerTodos');
-    $group->get('/{nombre}', \ProductoController::class . ':TraerUno');
-    $group->post('[/]', \ProductoController::class . ':CargarUno');
-    $group->post('/cargarCSV', \ProductoController::class . ':cargarProductosDesdeCSV');//->add(new SocioMiddleware());
+    $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV')->add(new SocioMiddleware());
+    $group->get('/listarProductos', \ProductoController::class . ':TraerTodos');
+    $group->get('/mostrarProducto/{nombre}', \ProductoController::class . ':TraerUno');
+    $group->post('/cargarProducto', \ProductoController::class . ':CargarUno');
+    $group->post('/cargarCSV', \ProductoController::class . ':cargarProductosDesdeCSV')->add(new SocioMiddleware());
+    $group->put('/modificarProducto', \ProductoController::class . ':ModificarUno')->add(new SocioMiddleware());
+    $group->delete('/borrarProducto', \ProductoController::class . ':BorrarUno')->add(new SocioMiddleware());
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
-    $group->post('[/]', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());
-    $group->get('[/]', \PedidoController::class . ':TraerTodos');
+    $group->post('/cargarPedido', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());
+    $group->get('/listarPedidos', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
+    $group->delete('/borrarPedido', \PedidoController::class . ':BorrarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes');

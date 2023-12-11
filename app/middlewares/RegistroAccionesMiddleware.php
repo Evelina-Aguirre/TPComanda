@@ -1,4 +1,5 @@
 <?php
+
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
@@ -18,7 +19,13 @@ class RegistroAccionesMiddleware
 
                 if ($datosUsuario) {
 
-                    $this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $request->getUri()->getPath());
+                    $rutaCompleta = $request->getUri()->getPath();
+
+                    $posicionApp = strpos($rutaCompleta, '/app/');
+                    $rutaDespuesDeApp = ($posicionApp !== false) ? substr($rutaCompleta, $posicionApp + 5) : $rutaCompleta;
+
+                    $this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $rutaDespuesDeApp);
+                    //$this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $request->getUri()->getPath());
                 }
             }
         }

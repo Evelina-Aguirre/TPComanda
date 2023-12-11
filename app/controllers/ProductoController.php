@@ -52,6 +52,42 @@ class ProductoController extends Producto
       ->withHeader('Content-Type', 'application/json');
   }
 
+  
+  public function ModificarUno($request, $response, $args)
+  {
+      $parametros = $request->getParsedBody();
+
+      $id = $parametros['id'];
+      $nombre = $parametros['nombre'];
+      $sectorAsignado = $parametros['sectorAsignado'];
+      $precio = $parametros['precio'];
+
+      $prod = new Producto();
+      $prod->id = $id;
+      $prod->nombre = $nombre;
+      $prod->sectorAsignado = $sectorAsignado;
+      $prod->precio = $precio;
+      $prod->modificarProducto($id);
+
+      $payload = json_encode(array("mensaje" => "Producto modificado con éxito"));
+
+      $response->getBody()->write($payload);
+      return $response
+          ->withHeader('Content-Type', 'application/json');
+  }
+
+  public function BorrarUno($request, $response, $args)
+  {
+      $queryParams = $request->getQueryParams();
+      $productoId = $queryParams['id'];
+      Producto::borrarProducto($productoId);
+
+      $payload = json_encode(array("mensaje" => "Producto borrado con éxito"));
+
+      $response->getBody()->write($payload);
+      return $response
+          ->withHeader('Content-Type', 'application/json');
+  }
   private function parseCSV($csv)
   {
     $parsedData = [];
@@ -109,7 +145,6 @@ return $response
     ->withStatus(201);
 
 }
-
 
 
   public function descargarProductosDesdeCSV($request, $response, $args)

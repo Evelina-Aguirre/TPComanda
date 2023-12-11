@@ -53,6 +53,24 @@ class Producto
         }
 
     }
+    public function modificarProducto($id)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("UPDATE productos SET nombre = :nombre, sectorAsignado = :sectorAsignado, precio = :precio WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':sectorAsignado',  $this->sectorAsignado, PDO::PARAM_STR);
+        $consulta->bindValue(':precio', $this->precio, PDO::PARAM_INT);
+        $consulta->execute();
+    }
+
+    public static function borrarProducto($id)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("DELETE FROM productos WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+    }
     
 
 }
