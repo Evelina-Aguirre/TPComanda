@@ -66,6 +66,16 @@ class Pedido
         }
     }
 
+    public static function relacionarFotoMesa($id, $rutaFotoMesa)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+        $consulta = $objAccesoDatos->prepararConsulta("UPDATE pedidos SET fotoMesa = :fotoMesa WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':fotoMesa', $rutaFotoMesa, PDO::PARAM_STR);
+        $consulta->execute();
+    }
+
     public function listarProductos()
     {
         $listaProductos = array();
@@ -255,7 +265,7 @@ class Pedido
 
 
 
-     public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
+    public function actualizarHoraFinalización($idPedido, $horaFinalizacion = null)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 

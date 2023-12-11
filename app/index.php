@@ -1,6 +1,5 @@
 <?php
 //php -S localhost:999 -t app
-// Error Handling
 error_reporting(-1);
 ini_set('display_errors', 1);
 
@@ -26,6 +25,7 @@ require_once './middlewares/GuardarUsuarioMiddleware.php';
 require_once './middlewares/SocioMiddleware.php';
 require_once './middlewares/MozoMiddleware.php';
 require_once './middlewares/ClienteMiddleware.php';
+require_once './middlewares/EmpleadoMiddleware.php';
 
 
 // Load ENV
@@ -56,7 +56,7 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
     $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV')->add(new SocioMiddleware());
     $group->get('/listarProductos', \ProductoController::class . ':TraerTodos');
     $group->get('/mostrarProducto/{nombre}', \ProductoController::class . ':TraerUno');
-    $group->post('/cargarProducto', \ProductoController::class . ':CargarUno');
+    $group->post('/cargarProducto', \ProductoController::class . ':CargarUno')->add(new SocioMiddleware());
     $group->post('/cargarCSV', \ProductoController::class . ':cargarProductosDesdeCSV')->add(new SocioMiddleware());
     $group->put('/modificarProducto', \ProductoController::class . ':ModificarUno')->add(new SocioMiddleware());
     $group->delete('/borrarProducto', \ProductoController::class . ':BorrarUno')->add(new SocioMiddleware());
@@ -64,12 +64,13 @@ $app->group('/productos', function (RouteCollectorProxy $group) {
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->post('/cargarPedido', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());
+    $group->post('/relacionarFotoAPedido', \PedidoController::class . ':relacionarFoto');
     $group->get('/listarPedidos', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
     $group->delete('/cancelarPedido', \PedidoController::class . ':BorrarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes');
+    $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes')->add(new EmpleadoMiddleware());
 
 });
 
@@ -94,7 +95,7 @@ $app->get('/estadisticas',  \EncuestaController::class . ':TraerEncuestas');
 $app->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV');
 $app->post('/cargarCsv', \ProductoController::class . ':CargarUnoProductoCsv');
 
-//PDF descargarProductosDesdeCSV
+//PDF 
 $app->post('/cargarPDF', \fpdfController::class . ':cargarPDF');
 $app->get('/descargarPDF', \fpdfController::class . ':descargarFPDF');
 $app->get('/mostrarPDF', \fpdfController::class . ':mostrarPDF');
