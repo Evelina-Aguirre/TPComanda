@@ -25,7 +25,6 @@ class RegistroAccionesMiddleware
                     $rutaDespuesDeApp = ($posicionApp !== false) ? substr($rutaCompleta, $posicionApp + 5) : $rutaCompleta;
 
                     $this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $rutaDespuesDeApp);
-                    //$this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $request->getUri()->getPath());
                 }
             }
         }

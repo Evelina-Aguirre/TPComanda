@@ -74,9 +74,10 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) {
-    $group->post('[/]', \MesaController::class . ':CargarUno');
-    $group->get('[/]', \MesaController::class . ':TraerTodos');
-    $group->put('[/]', \PedidoController::class . ':ModificarPedido');
+    $group->post('/cargarMesa', \MesaController::class . ':CargarUno');
+    $group->get('/listarMesas', \MesaController::class . ':TraerTodos');
+    $group->put('/modificarMesa', \MesaController::class . ':ModificarUno');
+    $group->delete('/borrarMesa', \MesaController::class . ':BorrarUno');
     $group->get('/masusada', \MesaController::class . ':mesaMasUsada');
 
 });

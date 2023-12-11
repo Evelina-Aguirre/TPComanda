@@ -37,6 +37,53 @@ class MesaController extends Usuario // implements IApiUsable
       ->withHeader('Content-Type', 'application/json');
   }
 
+  
+  public function ModificarUno($request, $response, $args)
+  {
+      $parametros = $request->getParsedBody();
+
+      $id = $parametros['id'] ?? null;
+      $codigo = $parametros['codigo'] ?? null;
+      $estado = $parametros['estado'] ?? null;
+      $puntaje = $parametros['puntaje'] ?? null;
+
+      $mesa = new Mesa();
+
+      try {
+          $mesa->modificarMesa($id, $codigo, $estado, $puntaje);
+
+          $payload = json_encode(array("mensaje" => "Mesa modificada con éxito"));
+          $response->getBody()->write($payload);
+
+          return $response->withHeader('Content-Type', 'application/json');
+      } catch (Exception $e) {
+          $payload = json_encode(array("error" => $e->getMessage()));
+          $response->getBody()->write($payload);
+
+          return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+      }
+  }
+
+  public function BorrarUno($request, $response, $args)
+  {
+      $queryParams = $request->getQueryParams();
+      $id = $queryParams['id'] ?? null;
+
+      if ($id) {
+          $mesa = new Mesa();
+          $mesa->borrarMesa($id);
+
+          $payload = json_encode(array("mensaje" => "Mesa eliminada con éxito"));
+          $response->getBody()->write($payload);
+
+          return $response->withHeader('Content-Type', 'application/json');
+      } else {
+          $payload = json_encode(array("error" => "ID de mesa no proporcionado"));
+          $response->getBody()->write($payload);
+
+          return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+      }
+    }
 
 
   public function consultarEstadoPedido($request, $response, $args)
