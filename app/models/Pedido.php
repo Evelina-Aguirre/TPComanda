@@ -198,6 +198,14 @@ class Pedido
         $this->recalcularTiempoEstimado($idPedido);
     }
 
+    public static function borrarPedido($idPedido)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("UPDATE pedidos SET estado = 'cancelado' WHERE id = :idPedido");
+        $consulta->bindValue(':idPedido', $idPedido, PDO::PARAM_INT);
+        $consulta->execute();
+    }
+
 
     public static function listarPedidosPendientesPorRol($sector)
     {

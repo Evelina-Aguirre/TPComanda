@@ -117,6 +117,25 @@ class PedidoController extends Pedido
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public function BorrarUno($request, $response, $args)
+    {
+        $queryParams = $request->getQueryParams();
+        $idPedido = $queryParams['id'] ?? null;
+
+        if ($idPedido) {
+            Pedido::borrarPedido($idPedido);
+
+            $payload = json_encode(array("mensaje" => "Pedido cancelado con éxito"));
+            $response->getBody()->write($payload);
+
+            return $response->withHeader('Content-Type', 'application/json');
+        } else {
+            $payload = json_encode(array("error" => "ID de pedido no proporcionado"));
+            $response->getBody()->write($payload);
+
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 
 
     public function servirPedido($request, $response, $args)

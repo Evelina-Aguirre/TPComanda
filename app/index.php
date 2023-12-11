@@ -66,7 +66,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->post('/cargarPedido', \PedidoController::class . ':CargarUno')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());
     $group->get('/listarPedidos', \PedidoController::class . ':TraerTodos');
     $group->put('/modificar', \PedidoController::class . ':ModificarUno');
-    $group->delete('/borrarPedido', \PedidoController::class . ':BorrarUno');
+    $group->delete('/cancelarPedido', \PedidoController::class . ':BorrarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes');
