@@ -61,17 +61,17 @@
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "Socio1",
+									"value": "Admin",
 									"type": "text"
 								},
 								{
 									"key": "clave",
-									"value": "clave123",
+									"value": "Admin",
 									"type": "text"
 								},
 								{
 									"key": "roll",
-									"value": "Socio",
+									"value": "Admin",
 									"type": "text"
 								},
 								{
@@ -189,7 +189,7 @@
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "Patelero1",
+									"value": "Patelero2",
 									"type": "text"
 								},
 								{
@@ -1013,7 +1013,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwtMozo}}",
+									"value": "{{jwtCocinero}}",
 									"type": "string"
 								}
 							]
@@ -1022,7 +1022,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 11,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cociner1\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 11,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1290,12 +1290,69 @@
 					"response": []
 				},
 				{
+					"name": "relacionarFotoPedido -2B",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtMozo}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "75",
+									"type": "text"
+								},
+								{
+									"key": "fotoMesa",
+									"type": "file",
+									"src": "/C:/xampp/htdocs/TPComanda/app/imagenes/Mesa2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/relacionarFotoAPedido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"relacionarFotoAPedido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "PendSector - 3A-6A",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtBartender}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/pedidos/pendientes/cocina",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/pendientes/tragos",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1306,7 +1363,7 @@
 								"app",
 								"pedidos",
 								"pendientes",
-								"cocina"
+								"tragos"
 							]
 						}
 					},
@@ -1315,6 +1372,16 @@
 				{
 					"name": "AsignarItems - paso3B",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -1346,11 +1413,21 @@
 				{
 					"name": "AsignarItem2 - paso3B",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 12,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cociner1\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 12,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1377,11 +1454,21 @@
 				{
 					"name": "AsignarItem3 - paso3B",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 13,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cociner1\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 13,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1408,11 +1495,21 @@
 				{
 					"name": "AsignarItem4 - paso3B",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCervecero}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 14,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 14,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1439,11 +1536,21 @@
 				{
 					"name": "AsignarItem5 - paso3B",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtBartender}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 15,\r\n  \"tiempoEstimado\": \"00:01:00\",\r\n  \"empleadoACargo\": \"bartender\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 15,\r\n  \"tiempoEstimado\": \"00:01:00\",\r\n  \"empleadoACargo\": \"bartender\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1483,7 +1590,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/cliente?codigoPedido=pp111&codigoMesa=aa123",
+							"raw": "http://localhost:999/TPComanda/app/consultarDemora?codigoPedido=pp111&codigoMesa=aa123",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1492,7 +1599,7 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"cliente"
+								"consultarDemora"
 							],
 							"query": [
 								{
@@ -1524,7 +1631,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/pedidos",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/listarPedidos",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1533,20 +1640,31 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"pedidos"
+								"pedidos",
+								"listarPedidos"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "cambiarAListo - 6B",
+					"name": "cambiarAListo - 6B cocina",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 45,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n     \"id\": 11,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1565,6 +1683,202 @@
 								"app",
 								"pedidos",
 								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiarAListo - 6B cocina",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"id\": 12,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/modificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiarAListo - 6B cocina",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCocinero}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"id\": 13,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/modificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiarAListo - 6B carvezas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCervecero}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"id\": 14,\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/modificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiarAListo - 6B tragos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtBartender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 15,\r\n  \"empleadoACargo\": \"Bartender1\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/modificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarProductosEnPedidos ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/pedidos/listarProductosEnPedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"pedidos",
+								"listarProductosEnPedidos"
 							]
 						}
 					},
@@ -1617,7 +1931,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/mesas",
+							"raw": "http://localhost:999/TPComanda/app/mesas/listarMesas",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1626,7 +1940,8 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"mesas"
+								"mesas",
+								"listarMesas"
 							]
 						}
 					},
@@ -1635,8 +1950,32 @@
 				{
 					"name": "cobrarcuenta-9",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtMozo}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/cobrar/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"cobrar",
+								"5"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1680,8 +2019,18 @@
 					"response": []
 				},
 				{
-					"name": "encuesta-11",
+					"name": "encuestaPositiva-11",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCliente}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1725,7 +2074,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/encuesta",
+							"raw": "http://localhost:999/TPComanda/app/encuesta/cargarEncuesta",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1734,7 +2083,8 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"encuesta"
+								"encuesta",
+								"cargarEncuesta"
 							]
 						}
 					},
@@ -1743,6 +2093,16 @@
 				{
 					"name": "encuestaNegativa-11",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtCliente}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1750,43 +2110,43 @@
 							"formdata": [
 								{
 									"key": "codigoPedido",
-									"value": "pp111",
+									"value": "pp222",
 									"type": "text"
 								},
 								{
 									"key": "codigoMesa",
-									"value": "aa123",
+									"value": "bb123",
 									"type": "text"
 								},
 								{
 									"key": "puntuacionMesa",
-									"value": "7",
+									"value": "4",
 									"type": "text"
 								},
 								{
 									"key": "puntuacionRestaurante",
-									"value": "10",
+									"value": "6",
 									"type": "text"
 								},
 								{
 									"key": "puntuacionMozo",
-									"value": "10",
+									"value": "4",
 									"type": "text"
 								},
 								{
 									"key": "puntuacionCocinero",
-									"value": "10",
+									"value": "5",
 									"type": "text"
 								},
 								{
 									"key": "texto",
-									"value": "Excelente experiencia.",
+									"value": "No tan bueno",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/encuesta",
+							"raw": "http://localhost:999/TPComanda/app/encuesta/cargarEncuesta",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1795,7 +2155,8 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"encuesta"
+								"encuesta",
+								"cargarEncuesta"
 							]
 						}
 					},
@@ -1872,7 +2233,7 @@
 					"response": []
 				},
 				{
-					"name": "pedidosConDemora-14",
+					"name": "NOEntregadosATIempo-14",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1910,7 +2271,7 @@
 					"response": []
 				},
 				{
-					"name": "pedidosSinDemora-15",
+					"name": "SIaTiempo-15",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1948,11 +2309,21 @@
 					"response": []
 				},
 				{
-					"name": "encuestaEstadisticas-16",
+					"name": "descargarLogoPDF -16",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -1960,7 +2331,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/encuestasEstadisticas",
+							"raw": "http://localhost:999/TPComanda/app/descargarPDFLogo",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1969,7 +2340,273 @@
 							"path": [
 								"TPComanda",
 								"app",
-								"encuestasEstadisticas"
+								"descargarPDFLogo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "operacionesPorSector-17",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/operacionesPorSector",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"operacionesPorSector"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CANToperacPorSector-17 Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/cantidadOperacionesPorSector",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"cantidadOperacionesPorSector"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OPxEmpleadoxSector -18",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/operacionesPorEmpleadoPorSector",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"operacionesPorEmpleadoPorSector"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MasVendMenosVend -19",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/masVendidoAMenosVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"masVendidoAMenosVendido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MasVendMenosVend -19 Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/masVendidoAMenosVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"masVendidoAMenosVendido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mesasFactBarataCara-21",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/masVendidoAMenosVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"masVendidoAMenosVendido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "facturoEntreDosFechas-22",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtSocio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:999/TPComanda/app/masVendidoAMenosVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "999",
+							"path": [
+								"TPComanda",
+								"app",
+								"masVendidoAMenosVendido"
 							]
 						}
 					},
