@@ -39,31 +39,70 @@ class Pedido
         $consulta->bindValue(':horaFinalizacion', $this->horaFinalizacion); //date_format($this->horaFinalizacion, 'h:i:sa'));
         $consulta->execute();
         $this->id = $objAccesoDatos->obtenerUltimoIdInsertado();
+        $totalPrecioProductos = 0;
+
         foreach ($productosArray as $idProducto) {
             $productoDetalles = Producto::obtenerProductoPorId($idProducto);
 
             if ($productoDetalles !== null) {
-                $this->agregarProductoAPedido($productoDetalles);
+                $precioProducto = $this->obtenerPrecioProducto($productoDetalles->id);
+                $totalPrecioProductos += $precioProducto;
+
+                $this->agregarProductoAPedido($productoDetalles, $precioProducto);
             }
         }
+
+        $this->actualizarPrecioTotalPedido($totalPrecioProductos);
+
         $estadoMesa = Mesa::mensajeEstadoMesa($this->estado);
         Mesa::ActualizarEstado($this->idMesa, $estadoMesa);
     }
 
-    public function agregarProductoAPedido($productoDetalles)
+
+    public function agregarProductoAPedido($productoDetalles, $precioProducto)
     {
         if ($productoDetalles !== null) {
-            $idProducto = $productoDetalles->id;
             $objAccesoDatos = AccesoDatos::obtenerInstancia();
-            $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO listaproductosporpedido (idPedido, idProducto, nombre,sector, precio)
-             VALUES (:idPedido, :idProducto, :nombre,:sector, :precio)");
+
+            $consulta = $objAccesoDatos->prepararConsulta("
+            INSERT INTO listaproductosporpedido (idPedido, idProducto, nombre, sector, precio)
+            VALUES (:idPedido, :idProducto, :nombre, :sector, :precio)
+        ");
             $consulta->bindValue(':idPedido', $this->id, PDO::PARAM_INT);
-            $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+            $consulta->bindValue(':idProducto', $productoDetalles->id, PDO::PARAM_INT);
             $consulta->bindValue(':nombre', $productoDetalles->nombre, PDO::PARAM_STR);
             $consulta->bindValue(':sector', $productoDetalles->sectorAsignado, PDO::PARAM_STR);
-            $consulta->bindValue(':precio', $productoDetalles->precio, PDO::PARAM_STR);
+            $consulta->bindValue(':precio', $precioProducto, PDO::PARAM_STR);
             $consulta->execute();
         }
+    }
+    private function actualizarPrecioTotalPedido($totalPrecioProductos)
+{
+    $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+    $consultaActualizar = $objAccesoDatos->prepararConsulta("
+        UPDATE pedidos
+        SET precioTotal = :totalPrecioProductos
+        WHERE id = :idPedido
+    ");
+    $consultaActualizar->bindValue(':totalPrecioProductos', $totalPrecioProductos, PDO::PARAM_STR);
+    $consultaActualizar->bindValue(':idPedido', $this->id, PDO::PARAM_INT);
+    $consultaActualizar->execute();
+}
+    private function obtenerPrecioProducto($idProducto)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+
+        $consulta = $objAccesoDatos->prepararConsulta("
+        SELECT precio
+        FROM productos
+        WHERE id = :idProducto
+    ");
+        $consulta->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+        $consulta->execute();
+
+        $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        return ($resultado) ? $resultado['precio'] : 0;
     }
 
     public static function relacionarFotoMesa($id, $rutaFotoMesa)

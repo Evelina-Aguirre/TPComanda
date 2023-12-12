@@ -1242,7 +1242,7 @@
 							"formdata": [
 								{
 									"key": "listaProductos",
-									"value": "1,4",
+									"value": "1,2,2,3,4",
 									"type": "text"
 								},
 								{
@@ -1257,13 +1257,14 @@
 								},
 								{
 									"key": "codigoPedido",
-									"value": "pp101",
+									"value": "pp555",
 									"type": "text"
 								},
 								{
 									"key": "fotoMesa",
 									"type": "file",
-									"src": "/C:/xampp/htdocs/TPComanda/app/imagenes/mesa1.jpg"
+									"src": "/C:/xampp/htdocs/TPComanda/app/imagenes/mesa1.jpg",
+									"disabled": true
 								},
 								{
 									"key": "tiempoEstimado",
@@ -1309,7 +1310,7 @@
 							"formdata": [
 								{
 									"key": "id",
-									"value": "75",
+									"value": "85",
 									"type": "text"
 								},
 								{
@@ -1344,7 +1345,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwtBartender}}",
+									"value": "{{jwtCervecero}}",
 									"type": "string"
 								}
 							]
@@ -1352,7 +1353,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/pedidos/pendientes/tragos",
+							"raw": "http://localhost:999/TPComanda/app/pedidos/pendientes/cervezas",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1363,7 +1364,7 @@
 								"app",
 								"pedidos",
 								"pendientes",
-								"tragos"
+								"cervezas"
 							]
 						}
 					},
@@ -1386,7 +1387,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 11,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cociner1\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 211,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1427,7 +1428,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 12,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 212,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1468,7 +1469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 13,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 213,\r\n  \"tiempoEstimado\": \"00:04:00\",\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1509,7 +1510,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 14,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n \"id\": 214,\r\n  \"tiempoEstimado\": \"00:02:00\",\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1550,7 +1551,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 15,\r\n  \"tiempoEstimado\": \"00:01:00\",\r\n  \"empleadoACargo\": \"bartender\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"en preparacion\"\r\n}",
+							"raw": "{\r\n     \"id\": 215,\r\n  \"tiempoEstimado\": \"00:01:00\",\r\n  \"empleadoACargo\": \"bartender\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"en preparacion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1590,7 +1591,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:999/TPComanda/app/consultarDemora?codigoPedido=pp111&codigoMesa=aa123",
+							"raw": "http://localhost:999/TPComanda/app/consultarDemora?codigoPedido=pp555&codigoMesa=aa123",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1604,7 +1605,7 @@
 							"query": [
 								{
 									"key": "codigoPedido",
-									"value": "pp111"
+									"value": "pp555"
 								},
 								{
 									"key": "codigoMesa",
@@ -1664,7 +1665,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 11,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n     \"id\": 211,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1705,7 +1706,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 12,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n     \"id\": 212,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1746,7 +1747,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"id\": 13,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n     \"id\": 213,\r\n  \"empleadoACargo\": \"cocinero1\",\r\n  \"sector\":\"cocina\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1787,7 +1788,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"id\": 14,\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n \"id\": 214,\r\n  \"empleadoACargo\": \"cervecero1\",\r\n  \"sector\":\"cervezas\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1828,7 +1829,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 15,\r\n  \"empleadoACargo\": \"Bartender1\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"listo para servir\"\r\n}",
+							"raw": "{\r\n    \"id\": 215,\r\n  \"empleadoACargo\": \"Bartender1\",\r\n  \"sector\":\"tragos\",\r\n  \"estado\":\"listo para servir\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2499,7 +2500,7 @@
 					"response": []
 				},
 				{
-					"name": "MasVendMenosVend -19 Copy",
+					"name": "logIngresoSistemas-20",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
