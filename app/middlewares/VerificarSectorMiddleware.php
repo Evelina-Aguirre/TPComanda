@@ -1,10 +1,11 @@
 <?php
+
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 use Firebase\JWT\JWT;
 
-class EmpleadoMiddleware
+class VerificarSectorMiddleware
 {
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
@@ -24,13 +25,26 @@ class EmpleadoMiddleware
         try {
             $datos = AutentificadorJWT::ObtenerData($token);
 
-            $rolesPermitidos = ["Cervecero", "Pastelero", "Bartender", "Cocinero"];
+            $permisosPorSector = [
+                'cocina' => 'Cocinero',
+                'tragos' => 'Bartender',
+                'cervezas' => 'Cervecero',
+                'postres' => 'Pastelero',
+            ];
 
-            if (in_array($datos->roll, $rolesPermitidos)) {
-                printf("Quien realiza esta acción es un Empleado");
+            //$sectorEnRuta = $request->getAttribute('routeInfo')[2]['sector'];
+            //('routeInfo')[2]['sector']
+            $rutaCompleta = $request->getUri()->getPath();
+            $posicionApp = strpos($rutaCompleta, '/app/');
+            $rutaDespuesDeApp = ($posicionApp !== false) ? substr($rutaCompleta, $posicionApp + 5) : $rutaCompleta;
+
+            $sectorEnRuta = explode('/', $rutaDespuesDeApp)[2];
+
+            if (isset($permisosPorSector[$sectorEnRuta]) && $datos->roll == $permisosPorSector[$sectorEnRuta]) {
+                printf(" ->Sector $sectorEnRuta");
                 $response = $handler->handle($request);
             } else {
-                $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para empleados y admin.']));
+                $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para empleados del mismo sector.']));
             }
         } catch (Exception $excepcion) {
             $response->getBody()->write(json_encode(['Error' => 'Credenciales inválidas. Intenta loguearte nuevamente.']));

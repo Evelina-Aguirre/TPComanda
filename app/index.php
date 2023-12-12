@@ -26,6 +26,7 @@ require_once './middlewares/SocioMiddleware.php';
 require_once './middlewares/MozoMiddleware.php';
 require_once './middlewares/ClienteMiddleware.php';
 require_once './middlewares/EmpleadoMiddleware.php';
+require_once './middlewares/VerificarSectorMiddleware.php';
 
 
 // Load ENV
@@ -70,7 +71,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->delete('/cancelarPedido', \PedidoController::class . ':BorrarUno');
     $group->get('/actualizarEstado/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
-    $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes')->add(new EmpleadoMiddleware());
+    $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes')->add(new VerificarSectorMiddleware())->add(new EmpleadoMiddleware());
 
 });
 
