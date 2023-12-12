@@ -30,7 +30,7 @@ class ClienteMiddleware
                 printf("Realiza esta acción un Cliente");
                 $response = $handler->handle($request);
             } else {
-                $response->getBody()->write(json_encode(['Error' => 'Dedes ser socio para realizr esta acción.']));
+                $response->getBody()->write(json_encode(['Error' => 'Solo los clientes pueden realizar esta acción.']));
             }
         } catch (Exception $excepcion) {
             $response->getBody()->write(json_encode(['Error' => $excepcion->getMessage()]));

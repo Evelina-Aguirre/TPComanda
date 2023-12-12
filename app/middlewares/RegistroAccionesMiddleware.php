@@ -24,7 +24,7 @@ class RegistroAccionesMiddleware
                     $posicionApp = strpos($rutaCompleta, '/app/');
                     $rutaDespuesDeApp = ($posicionApp !== false) ? substr($rutaCompleta, $posicionApp + 5) : $rutaCompleta;
 
-                    $this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->nombre, $request->getMethod(), $rutaDespuesDeApp);
+                    $this->registrarAccion($datosUsuario->data->id, $datosUsuario->data->roll,$datosUsuario->data->nombre, $request->getMethod(), $rutaDespuesDeApp);
                 }
             }
         }
@@ -52,14 +52,15 @@ class RegistroAccionesMiddleware
         }
     }
 
-    private function registrarAccion($usuarioId, $nombre, $metodo, $ruta)
+    private function registrarAccion($usuarioId,$sector, $nombre, $metodo, $ruta)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO registroacciones (usuarioid,nombre, metodo, ruta, fecha) VALUES (?,?, ?, ?, NOW())");
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO registroacciones (usuarioid,sector,nombre, metodo, ruta, fecha) VALUES (?,?, ?, ?,?, NOW())");
         $consulta->bindValue(1, $usuarioId, PDO::PARAM_INT);
-        $consulta->bindValue(2, $nombre, PDO::PARAM_STR);
-        $consulta->bindValue(3, $metodo, PDO::PARAM_STR);
-        $consulta->bindValue(4, $ruta, PDO::PARAM_STR);
+        $consulta->bindValue(2, $sector, PDO::PARAM_STR);
+        $consulta->bindValue(3, $nombre, PDO::PARAM_STR);
+        $consulta->bindValue(4, $metodo, PDO::PARAM_STR);
+        $consulta->bindValue(5, $ruta, PDO::PARAM_STR);
         $consulta->execute();
     }
 }

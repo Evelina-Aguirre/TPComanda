@@ -25,7 +25,7 @@ class MozoMiddleware
             if ($datos->roll == "Mozo") {
                 printf("Realiza esta acción un Mozo");
             } else {
-                $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los socios.']));
+                $response->getBody()->write(json_encode(['Error' => 'Acción reservada solamente para los mozos.']));
             }
             $response = $handler->handle($request);
         } catch (Exception $excepcion) {

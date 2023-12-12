@@ -41,4 +41,15 @@ class Login
             return $e;
         }
     }
+
+    public static function obtenerNombreUsuario($id)
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT nombre FROM usuarios WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+        $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        return ($resultado) ? $resultado['nombre'] : null;
+    }
 }

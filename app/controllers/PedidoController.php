@@ -141,11 +141,17 @@ class PedidoController extends Pedido
     public function listaPendientes($request, $response, $args)
     {
         $sector = $args['sector'];
-        //printf($sector);
-
         $pedidos = Pedido::listarPedidosPendientesPorRol($sector);
-
         $response->getBody()->write(json_encode($pedidos));
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function listaProductosPedidos($request, $response, $args)
+    {
+        $listaProductos = $this->listarProductosPedidos();
+        $payload = json_encode(array("listaProductos" => $listaProductos));
+        $response->getBody()->write($payload);
 
         return $response->withHeader('Content-Type', 'application/json');
     }

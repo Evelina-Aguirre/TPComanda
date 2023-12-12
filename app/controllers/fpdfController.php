@@ -64,6 +64,19 @@ class fpdfController
         return $response;
     }
 
+    public function descargarPDFLogo($request, $response, $args)
+    {
+        $pdf = new GlobalFPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Image('./imagenes/logo_Empresa_Grande.png', 20, 20, 170); 
+
+        $pdf->Cell(40, 10, 'LOGO EMPRESA:');
+
+        $pdf->Output("LogoEmpesa.pdf", "D");
+
+        return $response;
+    }
 
 }
 

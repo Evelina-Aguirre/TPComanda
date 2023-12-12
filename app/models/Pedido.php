@@ -26,8 +26,8 @@ class Pedido
 
         $horaCreacionFormatted = $this->horaCreacion ? date_format($this->horaCreacion, 'h:i:sa') : '00:00:00';
 
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO pedidos (idMesa, estado, codigoPedido,listaProductos, fotoMesa, tiempoEstimado, horaCreacion,
-         horaFinalizacion) VALUES (:idMesa, :estado, :codigoPedido,:listaProductos, :fotoMesa, :tiempoEstimado, :horaCreacion, :horaFinalizacion)");
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO pedidos (idMesa, estado, codigoPedido, listaProductos, fotoMesa, tiempoEstimado, 
+        horaCreacion, horaFinalizacion) VALUES (:idMesa, :estado, :codigoPedido, :listaProductos, :fotoMesa, :tiempoEstimado, CURRENT_TIMESTAMP(), :horaFinalizacion)");
         $productosArray = explode(',', $this->listaProductos);
         $consulta->bindValue(':idMesa', $this->idMesa, PDO::PARAM_INT);
         $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
@@ -35,7 +35,7 @@ class Pedido
         $consulta->bindValue(':listaProductos', $this->listaProductos, PDO::PARAM_STR);
         $consulta->bindValue(':fotoMesa', $this->fotoMesa, PDO::PARAM_STR);
         $consulta->bindValue(':tiempoEstimado', '00:00:00', PDO::PARAM_STR);
-        $consulta->bindValue(':horaCreacion', $horaCreacionFormatted);
+        //$consulta->bindValue(':horaCreacion', $horaCreacionFormatted);
         $consulta->bindValue(':horaFinalizacion', $this->horaFinalizacion); //date_format($this->horaFinalizacion, 'h:i:sa'));
         $consulta->execute();
         $this->id = $objAccesoDatos->obtenerUltimoIdInsertado();
@@ -107,7 +107,21 @@ class Pedido
         return $listaProductos;
     }
 
+    public function listarProductosPedidos()
+    {
+        $listaProductos = array();
+        $precioTotal = 0;
 
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("
+            SELECT  id, idProducto, nombre, precio, tiempoEstimado, empleadoACargo, estado
+            FROM listaproductosporpedido 
+        ");
+        $consulta->execute();
+        $listaProductos = $consulta->fetchAll(PDO::FETCH_OBJ);
+
+        return $listaProductos;
+    }
 
     public static function obtenerTodos()
     {

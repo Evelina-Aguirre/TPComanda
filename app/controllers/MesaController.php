@@ -105,19 +105,16 @@ class MesaController extends Usuario // implements IApiUsable
 
   public function cobrar($request, $response, $args)
   {
-    $idPedido = $args['idPedido'] ?? null;
-
-    $idMesa = Pedido::buscarIdMesadeunPedido($idPedido);
-
+    $idMesa = $args['idMesa'] ?? null;
     if ($idMesa !== false) {
-      Mesa::ActualizarEstado($idMesa, 'cliente pagando');
+      Mesa::ActualizarEstado($idMesa, 'con cliente pagando');
 
-      $successPayload = json_encode(array("mensaje" => "Estado de la mesa actualizado a 'cliente pagando'"));
+      $successPayload = json_encode(array("mensaje" => "Estado de la mesa actualizado a 'con cliente pagando'"));
       $response->getBody()->write($successPayload);
       return $response->withHeader('Content-Type', 'application/json');
     }
 
-    $errorPayload = json_encode(array("mensaje" => "No se pudo encontrar la mesa asociada al número de pedido proporcionado"));
+    $errorPayload = json_encode(array("mensaje" => "No se pudo encontrar la mesa con id $idMesa"));
     $response->getBody()->write($errorPayload);
     return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
   }

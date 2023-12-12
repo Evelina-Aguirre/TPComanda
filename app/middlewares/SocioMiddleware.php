@@ -12,7 +12,6 @@ class SocioMiddleware
         
         list($tokenType, $token) = sscanf($authorizationHeader, '%s %s');
 
-
         if (empty($token)) {
             $response = new Response();
             $response->getBody()->write(json_encode(['Error' => 'El usuario logueado no tiene las credenciales para realizar esta acción. 
@@ -25,7 +24,7 @@ class SocioMiddleware
           
             $datos = AutentificadorJWT::ObtenerData($token);
 
-            if ($datos->roll == "socio") {
+            if ($datos->roll == "Socio") {
                 printf("Quien realiza esta acción es un socio ");
                 $response = $handler->handle($request);
             } else {

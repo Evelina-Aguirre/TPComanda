@@ -22,7 +22,7 @@ class VerificarSectorMiddleware
 
         try {
             $datos = AutentificadorJWT::ObtenerData($token);
-
+;
             $permisosPorSector = [
                 'cocina' => 'Cocinero',
                 'tragos' => 'Bartender',
