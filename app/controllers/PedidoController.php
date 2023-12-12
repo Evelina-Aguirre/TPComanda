@@ -137,6 +137,16 @@ class PedidoController extends Pedido
         }
     }
 
+    public function PendientesPorId($request, $response, $args)
+    {
+        $idPedido = $args['id'];
+
+        $pedido = Pedido::listarPedidoPorId($idPedido);
+
+        $response->getBody()->write(json_encode($pedido));
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 
     public function listaPendientes($request, $response, $args)
     {

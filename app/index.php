@@ -56,7 +56,7 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
 })->add(new RegistroAccionesMiddleware());
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
-    $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV')->add(new SocioMiddleware());
+    $group->get('/descargarCSV', \ProductoController::class . ':descargarProductosDesdeCSV');
     $group->get('/listarProductos', \ProductoController::class . ':TraerTodos');
     $group->get('/mostrarProducto/{nombre}', \ProductoController::class . ':TraerUno');
     $group->post('/cargarProducto', \ProductoController::class . ':CargarUno')->add(new SocioMiddleware());
@@ -75,7 +75,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group) {
     $group->get('/actualizarHoraFinalización/{idPedido}', \PedidoController::class . ':ActualizarEstadoPedidoMesa');
     $group->get('/pendientes/{sector}', \PedidoController::class . ':listaPendientes')->add(new VerificarSectorMiddleware())->add(new EmpleadoMiddleware());
     $group->get('/listarProductosEnPedidos', \PedidoController::class . ':listaProductosPedidos');
-
+    
 })->add(new RegistroAccionesMiddleware());
 
 $app->group('/mesas', function (RouteCollectorProxy $group) {
@@ -84,7 +84,7 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
     $group->put('/modificarMesa', \MesaController::class . ':ModificarUno');
     $group->delete('/borrarMesa', \MesaController::class . ':BorrarUno');
     $group->get('/masusada', \MesaController::class . ':mesaMasUsada')->add(new SocioMiddleware());
-
+    
 })->add(new RegistroAccionesMiddleware());
 
 $app->get('/servirpedidos', \PedidoController::class . ':servirPedido')->add(new MozoMiddleware())->add(new RegistroAccionesMiddleware());

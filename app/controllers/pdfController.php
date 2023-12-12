@@ -44,24 +44,5 @@ class pdfController
 
         $dompdf->stream("encuestas.pdf", array('Attachment' => 0));
 
-
-        /*  $pdfFilename = "encuestas.pdf";
-    
-        $response = $response->withHeader('Content-Type', 'application/pdf')
-            ->withHeader('Content-Disposition', 'attachment; filename=' . $pdfFilename)
-            ->withHeader('Pragma', 'no-cache')
-            ->withHeader('Expires', '0');
-    
-        $pdfPath = __DIR__ . '/../ruta/a/tu/pdf/' . $pdfFilename;
-    
-        if (file_exists($pdfPath)) {
-            $pdfContent = file_get_contents($pdfPath);
-            $response->getBody()->write($pdfContent);
-            return $response;
-        } else {
-            
-        $payload = json_encode(array("mensaje" =>'error'));
-        $response->getBody()->write($payload);
-        }*/
     }
 }

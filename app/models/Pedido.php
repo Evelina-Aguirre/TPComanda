@@ -182,7 +182,7 @@ class Pedido
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
 
         $consulta = $objAccesoDatos->prepararConsulta("
-        SELECT id, idMesa, estado, codigoPedido, fotoMesa, tiempoEstimado, horaCreacion, horaFinalizacion
+        SELECT *
         FROM pedidos
         WHERE id = :idPedido");
 
